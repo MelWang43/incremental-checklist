@@ -2,9 +2,11 @@
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
+  --bg-darker: #f4f3ec;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
-  --accent: #aa3bff;
+  --accent: #9431df;
+  --accent-lighter: #b964fa42;
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
@@ -35,9 +37,10 @@
     --text: #9ca3af;
     --text-h: #f3f4f6;
     --bg: #16171d;
+    --bg-darker: #1f2028;
     --border: #2e303a;
     --code-bg: #1f2028;
-    --accent: #c084fc;
+    --accent: #905dc4;
     --accent-bg: rgba(192, 132, 252, 0.15);
     --accent-border: rgba(192, 132, 252, 0.5);
     --social-bg: rgba(47, 48, 58, 0.5);
@@ -82,4 +85,37 @@ main {
 
 footer {
   grid-area: footer;
+}
+
+button {
+  background-color: var(--accent);
+  color: var(--text-h);
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--sans);
+  font-size: 1rem;
+}
+
+button:hover{
+  background-color: var(--accent-bg);
+  color: var(--text-h);
+  border-color: var(--accent)
+}
+
+button:active{
+  background-color: var(--accent-lighter);
+  color: var(--text-h);
+  border-color: var(--accent);
+  scale: 0.9;
+}
+
+input {
+  font-size: 1rem;
+  font-family: var(--sans);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
 }

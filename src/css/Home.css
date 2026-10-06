@@ -1,3 +1,7 @@
 .home-sidebar{
     border-right: 1px solid var(--border);
 }
+
+.home-main{
+    min-width: 0;
+}

@@ -10,6 +10,7 @@ import Navbar from './components/Navbar'
 // Pages
 import Home from './pages/Home'
 import ProjectPage from './pages/ProjectPage'
+import SignInPage from './pages/SignInPage'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<ProjectPage />} />
+          <Route path="/login" element={<SignInPage />} />
         </Routes>
       </main>
     </>

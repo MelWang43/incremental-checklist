@@ -1,0 +1,64 @@
+.new-project-btn{
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 1rem;
+    border: 2px dashed var(--accent-lighter);
+    background-color: var(--bg);
+
+    color: var(--text);
+    border-radius: 0.5rem;
+
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.new-project-btn:hover{
+    background-color: var(--accent-bg);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.new-project-btn:active {
+    background-color: var(--accent-lighter);
+    scale: 1;
+}
+
+.form-wrapper{
+    position: relative;
+    transition: all 0.2s ease-in-out;
+}
+.new-project-form {
+    position: absolute;
+    top: 1;
+    left: 0;
+    width: 95%;
+    background-color: var(--bg-darker);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid var(--social-bg);
+    margin: 1rem 0;
+    
+    transform-origin: top center;
+    transform: scaleY(0);
+    /* transform: ; */
+    transition: all 0.2s ease-in-out;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    pointer-events: none;
+}
+
+.new-project-form.active{
+    position: relative;
+    transform: scaleY(1);
+    pointer-events: auto;
+    /* transform: ; */
+}
+
+.btn-row-container{
+    display: flex;
+    gap: 1rem;
+    margin: 1rem;
+}
