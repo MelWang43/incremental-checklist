@@ -62,3 +62,7 @@
     gap: 1rem;
     margin: 1rem;
 }
+
+input.invalid {
+    border: 2px solid red;
+}

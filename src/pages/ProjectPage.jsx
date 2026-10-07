@@ -2,18 +2,16 @@ import CreateProjectCard from "../components/projects/CreateProjectCard"
 import ProjectCard from "../components/projects/ProjectCard"
 import '../css/ProjectPage.css'
 import { useAuth } from "../contexts/AuthContext"
+import { useProjects } from "../contexts/ProjectContext"
+import { useEffect } from "react"
 
 function ProjectPage(){
     const {user, loading} = useAuth()
-    const projects = [
-        {id: 1, name: "Test"},
-        {id: 2, name: "Test2"},
-        {id: 3, name: "Test3"},
-        {id: 4, name: "Test4"},
-        {id: 5, name: "Test5"},
-        {id: 6, name: "Test6"},
-
-    ]
+    const { projects, loadProjects} = useProjects();
+    
+    useEffect(()=> {
+        loadProjects();
+    }, [])
 
     if (!user){
         return <p>Log in first</p>            
