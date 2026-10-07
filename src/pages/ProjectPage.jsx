@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useProjects } from "../contexts/ProjectContext";
 import { useEffect, useState } from "react";
 import '../css/ProjectPage.css'
+import Board from '../components/Board'
 
 function ProjectPage() {
     const { id } = useParams();
@@ -9,6 +10,14 @@ function ProjectPage() {
 
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const [boards, setBoards] = useState([
+        {id: 0, name: "Board"},
+        {id: 2, name: "Board"},
+        {id: 3, name: "Board"},
+        {id: 4, name: "Board"},
+
+    ])
 
     useEffect(() => {
         const loadProject = async () => {
@@ -35,9 +44,18 @@ function ProjectPage() {
     }
 
     return (
+        <>
         <div className="project-header">
             <h3>{project.name}</h3>
         </div>
+
+        <div className="project-content">
+            <div className="board-container">
+                {boards.map((board) => <Board key={board.id} board={board}/>)}
+                <button className="btn-add-board">+ Add New</button>
+            </div>
+        </div>
+        </>
     );
 }
 

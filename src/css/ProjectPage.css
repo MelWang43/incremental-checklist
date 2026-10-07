@@ -9,3 +9,37 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
 }
+
+.project-content{
+    padding: 1rem;
+    width: 100%;
+}
+
+.board-container{
+    display: flex;
+    gap: 1rem;
+    width: fit-content;
+}
+
+.btn-add-board{
+    width: 15vw;
+    height: 4rem;
+
+    border: 2px dashed var(--accent-lighter);
+    background-color: var(--bg);
+
+    color: var(--text);
+    border-radius: 0.5rem;
+
+    transition: all 0.2s ease;
+}
+.btn-add-board:hover{
+    background-color: var(--accent-bg);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-add-board:active {
+    background-color: var(--accent-lighter);
+    scale: 1;
+}

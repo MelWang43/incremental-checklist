@@ -3,6 +3,7 @@
   --text-h: #08060d;
   --bg: #fff;
   --bg-darker: #f4f3ec;
+  --bg-darker2: #d6d6d4;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #9431df;
@@ -38,6 +39,7 @@
     --text-h: #f3f4f6;
     --bg: #16171d;
     --bg-darker: #1f2028;
+    --bg-darker2:rgb(18, 19, 24)8;
     --border: #2e303a;
     --code-bg: #1f2028;
     --accent: #905dc4;
@@ -57,9 +59,6 @@ body {
   margin: 0;
 }
 
-#root {
-
-}
 
 .grid-page{
   display: grid;

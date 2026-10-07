@@ -1,0 +1,28 @@
+.board{
+    background-color: var(--bg-darker2);
+    border: 1px solid var(--text);
+    border-radius: 1rem;
+    width: 15vw;
+    padding: 0.5rem 1rem;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.board-items-container{
+    padding: 0.5rem 0rem;
+}
+
+.board-item{
+    display: flex;
+    background-color: var(--bg-darker);
+    padding: 0.2rem 0.7rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--border)
+
+}
+
+.board-item:hover{
+    border: 1px solid var(--accent);
+}
