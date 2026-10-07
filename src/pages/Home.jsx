@@ -1,5 +1,5 @@
 import '../css/Home.css'
-import ProjectPage from './ProjectPage'
+import ProjectDisplayPage from './ProjectDisplayPage'
 
 function Home(){
 
@@ -7,7 +7,7 @@ function Home(){
     return (
         <div className="grid-page">
             <aside className="home-sidebar">Test</aside>
-            <main className="home-main"><ProjectPage/></main>
+            <main className="home-main"><ProjectDisplayPage/></main>
         </div>
     )
 }

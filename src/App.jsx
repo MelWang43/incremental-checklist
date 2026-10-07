@@ -9,8 +9,8 @@ import Navbar from './components/Navbar'
 
 // Pages
 import Home from './pages/Home'
-import ProjectPage from './pages/ProjectPage'
 import SignInPage from './pages/SignInPage'
+import ProjectPage from './pages/ProjectPage'
 
 function App() {
 
@@ -20,8 +20,8 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<ProjectPage />} />
           <Route path="/login" element={<SignInPage />} />
+          <Route path="/project/:id" element={<ProjectPage />} />
         </Routes>
       </main>
     </>

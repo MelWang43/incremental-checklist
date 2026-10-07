@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import '../../css/CreateProjectCard.css'
 import { useProjects } from '../../contexts/ProjectContext';
+import { useNavigate } from 'react-router-dom';
 
 function CreateProjectCard(){
     const [adding, setAdding] = useState(false);
@@ -9,9 +10,13 @@ function CreateProjectCard(){
 
     const {addProject, loadProjects} = useProjects();
 
+    const nav = useNavigate()
+
     const handleCreatePress = (e) => {
         e.preventDefault();
-        if(!adding) setAdding(true);
+        setAdding(!adding)
+
+        if(adding) handleCloseForm(e)
     }
 
     const handleNameChanged = (e) => {
@@ -31,14 +36,18 @@ function CreateProjectCard(){
             return;
         }
 
-        await addProject(name, "Test");
+        const data = await addProject(name, "Test");
         setAdding(false);
         loadProjects()
         setName("")
         setNameValid(true)
+
+        nav('/project/' + data[0].id)
     }
     const handleCloseForm = (e) => {
         setAdding(false);
+        setName("")
+        setNameValid(true)
     }
     
 

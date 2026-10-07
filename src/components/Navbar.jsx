@@ -50,6 +50,8 @@ function Navbar() {
                     <Link to="/login" className="nav-link">
                         Log in
                     </Link>
+
+                    
                 )}
             </div>
         </nav>

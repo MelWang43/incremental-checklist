@@ -38,7 +38,22 @@ export function ProjectProvider({ children }) {
         }
         const data = await response.json();
         setProjects(data);
-        console.log(data);
+        console.log("Retrieved", data);
+    }
+
+    async function selectProjectID(id){
+        const response = await fetch("http://localhost:3000/api/projects/" + id, {
+            headers: {
+                Authorization: `Bearer ${session.access_token}`
+            }
+        });
+
+        if(!response.ok){
+            console.error("Failed to get project " + id);
+            return;
+        }
+        const data = await response.json();
+        return data
     }
 
     async function addProject(name, description = ""){
@@ -46,7 +61,6 @@ export function ProjectProvider({ children }) {
             console.error("Failed to add project: User is not authenticated");
             return;
         }
-
 
         const response = await fetch("http://localhost:3000/api/projects", {
             method: "POST",
@@ -60,8 +74,15 @@ export function ProjectProvider({ children }) {
             })
         });
 
+        if(!response.ok){
+            console.error("Failed to add project");
+            return;
+        }
+
         const data = await response.json();
         console.log('Created:',data);
+
+        return data
     }
 
     return (
@@ -69,7 +90,8 @@ export function ProjectProvider({ children }) {
             { 
                 projects, 
                 loadProjects,
-                addProject
+                addProject,
+                selectProjectID
              }}>
             {children}
         </ProjectContext.Provider>

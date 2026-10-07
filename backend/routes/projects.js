@@ -1,5 +1,4 @@
 import express from "express";
-import {createUserSupabase} from "../supabase.js";
 
 const projectsRouter = express.Router();
 
@@ -33,7 +32,7 @@ projectsRouter.get("/", async (req, res) => {
         .from("projects")
         .select("*")
         .eq("user_id", userId)
-        .order("id", { ascending: false });
+        .order("accessed_at", { ascending: false });
 
     if (error) {
         return res.status(500).json({ error: error.message });
@@ -44,12 +43,12 @@ projectsRouter.get("/", async (req, res) => {
 
 
 // READ ONE
-// GET /api/jobs/:id
+// GET /api/projects/:id
 projectsRouter.get("/:id", async (req, res) => {
     const { id } = req.params;
 
     const { data, error } = await req.supabase
-        .from("jobs")
+        .from("projects")
         .select("*")
         .eq("id", id)
         .single();
@@ -63,17 +62,17 @@ projectsRouter.get("/:id", async (req, res) => {
 
 
 // UPDATE
-// PUT /api/jobs/:id
+// PUT /api/projects/:id
 projectsRouter.put("/:id", async (req, res) => {
     const { id } = req.params;
-    const { jobTitle, companyName, status } = req.body;
+    const { name, description, accessed_at } = req.body;
 
     const { data, error } = await req.supabase
-        .from("jobs")
+        .from("projects")
         .update({
-            title: jobTitle,
-            company_name: companyName,
-            status: status,
+            name: name,
+            description: description,
+            accessed_at: accessed_at,
         })
         .eq("id", id)
         .select()
@@ -88,12 +87,12 @@ projectsRouter.put("/:id", async (req, res) => {
 
 
 // DELETE
-// DELETE /api/jobs/:id
+// DELETE /api/projects/:id
 projectsRouter.delete("/:id", async (req, res) => {
     const { id } = req.params;
 
     const { data, error } = await req.supabase
-        .from("jobs")
+        .from("projects")
         .delete()
         .eq("id", id)
         .select()

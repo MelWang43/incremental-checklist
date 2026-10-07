@@ -1,26 +1,11 @@
-.project-page{
+.project-header{
+    justify-self: space-between;
+    background-color: var(--bg-darker);
+
+    padding: 0.11rem 2rem;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-}
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-.recent-projects{
-    display: flex;
-    flex-direction: column;
-    
-    width: 90%;
-    max-width: 800px;
-    padding: 1rem;
-}
-
-.project-grid{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 150px));
-    align-items: center;
-    justify-items: center;
-
-    gap: 0.5rem;
-    width: 100%;
-    
-    margin: 0 auto;
 }

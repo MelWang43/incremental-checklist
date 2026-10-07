@@ -1,10 +1,12 @@
 import {useState} from 'react'
 import { supabase } from "../supabaseClient.js";
+import { useNavigate } from 'react-router-dom';
 
 function SignInPage(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const nav = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
         const {data, error} = await supabase.auth.signInWithPassword({
@@ -17,7 +19,7 @@ function SignInPage(){
             return
         }
 
-
+        nav('/');
         console.log("Logged in:", data.user)
     }
 
@@ -34,6 +36,7 @@ function SignInPage(){
         }
 
 
+        nav('/');
         console.log("Signed up:", data.user)
     }
     return <div className="signin-page">

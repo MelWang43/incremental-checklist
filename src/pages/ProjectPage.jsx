@@ -1,39 +1,44 @@
-import CreateProjectCard from "../components/projects/CreateProjectCard"
-import ProjectCard from "../components/projects/ProjectCard"
+import { useParams } from "react-router-dom";
+import { useProjects } from "../contexts/ProjectContext";
+import { useEffect, useState } from "react";
 import '../css/ProjectPage.css'
-import { useAuth } from "../contexts/AuthContext"
-import { useProjects } from "../contexts/ProjectContext"
-import { useEffect } from "react"
 
-function ProjectPage(){
-    const {user, loading} = useAuth()
-    const { projects, loadProjects} = useProjects();
-    
-    useEffect(()=> {
-        loadProjects();
-    }, [])
+function ProjectPage() {
+    const { id } = useParams();
+    const { selectProjectID } = useProjects();
 
-    if (!user){
-        return <p>Log in first</p>            
+    const [project, setProject] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadProject = async () => {
+            setLoading(true);
+
+            const proj = await selectProjectID(id);
+
+            console.log("ID:", id);
+            console.log("Project returned:", proj);
+
+            setProject(proj);
+            setLoading(false);
+        };
+        setLoading(true)
+        loadProject();
+    }, []);
+
+    if (loading) {
+        return <h1>Loading...</h1>;
     }
-    return(
-        <div className="project-page">
-            
 
-            <div className="project-header">
+    if (!project) {
+        return <h1>Failed to get Project</h1>;
+    }
 
-            </div>
-
-            <div className="recent-projects">
-
-                <CreateProjectCard/>
-                <h3>Recent</h3>
-                <div className="project-grid">
-                    {projects.map((project) => <ProjectCard project={project} key={project.id}/>)}
-                </div>
-            </div>
+    return (
+        <div className="project-header">
+            <h3>{project.name}</h3>
         </div>
-    )
+    );
 }
 
-export default ProjectPage
+export default ProjectPage;
