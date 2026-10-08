@@ -6,18 +6,12 @@ import Board from '../components/Board'
 
 function ProjectPage() {
     const { id } = useParams();
-    const { selectProjectID } = useProjects();
+    const { selectProjectID, loadBoards, addBoard} = useProjects();
 
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const [boards, setBoards] = useState([
-        {id: 0, name: "Board"},
-        {id: 2, name: "Board"},
-        {id: 3, name: "Board"},
-        {id: 4, name: "Board"},
-
-    ])
+    const [boards, setBoards] = useState([])
 
     useEffect(() => {
         const loadProject = async () => {
@@ -25,16 +19,23 @@ function ProjectPage() {
 
             const proj = await selectProjectID(id);
 
-            console.log("ID:", id);
-            console.log("Project returned:", proj);
-
             setProject(proj);
             setLoading(false);
+
+            const board = await loadBoards(id)
+            setBoards(board);
         };
         setLoading(true)
         loadProject();
     }, []);
 
+    async function createNewBoard(e){
+        const newBoard = {name: 'New Board', index: !boards ? 0 : boards.length}
+        console.log("New Board Info:", newBoard)
+        await addBoard(id, newBoard)
+        const board = await loadBoards(id)
+        setBoards(board);
+    }
     if (loading) {
         return <h1>Loading...</h1>;
     }
@@ -51,8 +52,8 @@ function ProjectPage() {
 
         <div className="project-content">
             <div className="board-container">
-                {boards.map((board) => <Board key={board.id} board={board}/>)}
-                <button className="btn-add-board">+ Add New</button>
+                {boards && boards.map((board) => <Board key={board.id} board={board}/>)}
+                <button onClick={createNewBoard} className="btn-add-board">+ Add New</button>
             </div>
         </div>
         </>

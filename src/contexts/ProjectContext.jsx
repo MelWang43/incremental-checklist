@@ -19,7 +19,7 @@ export function ProjectProvider({ children }) {
         loadProjects()
     }, [loading, session])
 
-
+    // =============== PROJECT FUNCTIONS ===============
     async function loadProjects(){
         if(!session){
             console.error("Failed to load projects: User is not authenticated");
@@ -85,13 +85,63 @@ export function ProjectProvider({ children }) {
         return data
     }
 
+    // =============== BOARD FUNCTIONS ===============
+
+    async function loadBoards(projectID){
+        if(!session){
+            console.error("Failed to load projects: User is not authenticated");
+            return;
+        }
+
+        const response = await fetch(`http://localhost:3000/api/projects/${projectID}/boards`, {
+            headers: {
+                Authorization: `Bearer ${session.access_token}`
+            }
+        });
+
+        const {data, error} = await response.json();
+        if(!response.ok){
+            console.error("Failed to load board for Project: " + projectID + ":", error);
+            return;
+        }
+        console.log("Retrieved", data);
+        return data
+    }
+
+    async function addBoard(projectID, board){
+        const response = await fetch(`http://localhost:3000/api/projects/${projectID}/boards`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+                name: board.name,
+                index: board.index
+            })
+        });
+
+        const {data, error} = await response.json();
+        if(!response.ok){
+            console.error("Failed to add board: ", error);
+            return;
+        }
+
+        console.log('Created Board:',data);
+
+        return data
+    }
+
     return (
         <ProjectContext.Provider value={
             { 
                 projects, 
                 loadProjects,
                 addProject,
-                selectProjectID
+                selectProjectID,
+
+                loadBoards,
+                addBoard
              }}>
             {children}
         </ProjectContext.Provider>
