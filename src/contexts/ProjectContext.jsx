@@ -96,6 +96,8 @@ export function ProjectProvider({ children }) {
 
     // =============== BOARD FUNCTIONS ===============
 
+    
+
     async function loadBoards(projectID){
         if(!session){
             console.error("Failed to load projects: User is not authenticated");
@@ -141,6 +143,32 @@ export function ProjectProvider({ children }) {
         return data
     }
 
+    async function updateBoard(projectID, boardID, newName, newIndex){
+
+        console.log("Updating:", boardID, newName, newIndex)
+        const response = await fetch(`http://localhost:3000/api/projects/${projectID}/boards/${boardID}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+                name: newName,
+                index: newIndex
+            })
+        });
+
+        const {data, error} = await response.json();
+        if(!response.ok){
+            console.error("Failed to update board: ", error);
+            return;
+        }
+
+        console.log('Updated Board:', data);
+
+        return data
+    }
+
     return (
         <ProjectContext.Provider value={
             { 
@@ -151,7 +179,8 @@ export function ProjectProvider({ children }) {
                 swapProjectIndex,
 
                 loadBoards,
-                addBoard
+                addBoard,
+                updateBoard
              }}>
             {children}
         </ProjectContext.Provider>

@@ -6,7 +6,7 @@ import Board from '../components/Board'
 
 function ProjectPage() {
     const { id } = useParams();
-    const { selectProjectID, loadBoards, addBoard, swapProjectIndex} = useProjects();
+    const { selectProjectID, loadBoards, addBoard, updateBoard} = useProjects();
 
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -35,7 +35,6 @@ function ProjectPage() {
         };
         setLoading(true)
         loadProject();
-
         
     }, []);
 
@@ -45,20 +44,28 @@ function ProjectPage() {
             setMousePos(pos)
             // Determine if mouse is in the area of a board, prompting a move
             if(editingBoards){
-                let newGhostIndex = 1;
+                let newGhostIndex = 0;
                 for(var i = 1; i < boardStats.length; i++){
                     
-                    if(i < boardStats.length - 1 && pos.x < boardStats[i].x){
-                        newGhostIndex = i;
+                    if(i >= editIndex){
+                        if(i < boardStats.length - 1 && pos.x < boardStats[i + 1].x && pos.x >= boardStats[i].x){
+                        newGhostIndex = i
                         break;
+                        }
+                    }  
+                    
+                    if(i <= editIndex){
+                        if(i < boardStats.length - 1 && pos.x < boardStats[i].x ){
+                        newGhostIndex = i
+                        break;
+                        }
                     }
-
-                    // if(pos.x >= boardStats[i].x)
 
                     if(i === boardStats.length - 1 ){
-                        newGhostIndex = i;
+                        newGhostIndex = i
                     }
                 }
+                console.log("Ghost: " + newGhostIndex, "Editing: " + editIndex, "IsEditing?", editingBoards)
                 setGhostBoardIndex(newGhostIndex);
                 
             }
@@ -70,6 +77,20 @@ function ProjectPage() {
             document.removeEventListener("mousemove", handleMouseMove)
         }
     }, [editingBoards])
+
+    useEffect(() => {
+
+        const handleMouseUp = (e) =>{
+            // if(e.button != 0) return;
+            handleStopEditing()
+        }
+
+        document.addEventListener("mouseup", handleMouseUp)
+        
+        return () => {
+            document.removeEventListener("mouseup", handleMouseUp)
+        }
+    }, [editingBoards, editIndex, ghostBoardIndex])
 
     async function createNewBoard(e){
         const newBoard = {name: 'New Board', index: !boards ? 0 : boards.length + 1}
@@ -91,16 +112,37 @@ function ProjectPage() {
             return {index: index, x: newX}
         })
         setBoardStats(stats)
-        console.log(stats)
     }
 
-    const handleStopEditing = () => {
+    async function handleStopEditing() {
+        if(!editingBoards) return
         console.log("STOPPED EDITING")
+        console.log("Attempting to swap: ", editIndex, "and", ghostBoardIndex)
+        
+        if (editIndex !== ghostBoardIndex) {
+            const next = [...boards];
+            const i1 = editIndex - 1;
+            const i2 = ghostBoardIndex - 1;
+            
+            const [item] = next.splice(i1, 1)
+            next.splice(i2, 0, item)
 
-        if(editIndex !== ghostBoardIndex) swapProjectIndex(editIndex, ghostBoardIndex)
+            setBoards(next)                      
+            updateBoardIndexesInstant();
+            updateAllBoardIndexes(next)
+        }
 
         setEditingBoards(false)
         setEditIndex(-1)
+    }
+
+    function updateBoardIndexesInstant(){
+        setBoards(prev => prev.map((board, index) => ({...board, index : index + 1})))
+    }
+    async function updateAllBoardIndexes(boards){
+        for(let i = 0; i < boards.length; i++){
+            await updateBoard(project.id, boards[i].id, boards[i].name, i + 1)
+        }
     }
 
     if (loading) {
@@ -112,7 +154,7 @@ function ProjectPage() {
     }
 
     
-
+    const ghostBoard = (<div className="board ghost">GHOST</div>)
     return (
         <>
         <div className="project-header">
@@ -122,12 +164,15 @@ function ProjectPage() {
         <div className="project-content">
             <div className="board-container">
                 {boards && boards.map((board) => {
+
+                    
                     return (
                         <>
+                        {editingBoards && ghostBoardIndex === board.index && board.index < editIndex ?  ghostBoard : <></>}
                         {editingBoards && editIndex === board.index ? 
                             <></> :
                             <div key={board.id} ref={(el) => boardRefs.current[board.index] = el}>
-                                    <Board key={board.id} 
+                                    <Board  
                                     board={board} 
                                     onDragStart={handleStartEditing} 
                                     onDragEnd={handleStopEditing}
@@ -135,11 +180,12 @@ function ProjectPage() {
                             </div>
                         }
 
-                        {editingBoards && ghostBoardIndex === board.index ? <div className="board ghost">GHOST</div> : <></>}
+                        {editingBoards && ghostBoardIndex === board.index && board.index >= editIndex ? ghostBoard : <></>}
                         </>
                         
                     )
                 })}
+                {/* {editingBoards && ghostBoardIndex === boards.length ? <div className="board ghost">GHOST</div> : <></>} */}
                     
                         
                 <button onClick={createNewBoard} className="btn-add-board">+ Add New</button>

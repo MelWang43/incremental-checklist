@@ -6,17 +6,7 @@ function Board({board, onDragStart, onDragEnd}){
     const [dragging, setDragging] = useState(false);
 
     useEffect(() => {
-        const handleMouseUp = (e) =>{
-            // if(e.button != 0) return;
-            setDragging(false);
-            onDragEnd();
-        }
-
-        document.addEventListener("mouseup", handleMouseUp)
         
-        return () => {
-            document.removeEventListener("mouseup", handleMouseUp)
-        }
     }, [])
     const handleMouseDown = (e) => {
         e.preventDefault()
@@ -26,7 +16,7 @@ function Board({board, onDragStart, onDragEnd}){
     }
     return (
         <div className={`board ${dragging ? 'dragging' : ''}`} onMouseDown={handleMouseDown} >
-            <span>{`${board.name} ${board.index}`}</span>
+            <span>{`${board.name}`}</span>
             <div className="board-items-container">
                 <div className="board-item">
                     <span>Text</span>

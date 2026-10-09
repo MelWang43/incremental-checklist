@@ -51,7 +51,7 @@ boardsRouter.get("/:id", async (req, res) => {
     const { id } = req.params;
 
     const { data, error } = await req.supabase
-        .from("projects")
+        .from("boards")
         .select("*")
         .eq("id", id)
         .single();
@@ -65,21 +65,21 @@ boardsRouter.get("/:id", async (req, res) => {
 
 
 // UPDATE
-// PUT /api/projects/:id
+// PUT /api/projects/:pid/boards/:id
 boardsRouter.put("/:id", async (req, res) => {
-    const { id } = req.params;
-    const { name, description, accessed_at } = req.body;
+    const { pid, id } = req.params;
+    const { name, index } = req.body;
 
     const { data, error } = await req.supabase
-        .from("projects")
+        .from("boards")
         .update({
-            name: name,
-            description: description,
-            accessed_at: accessed_at,
+            name,
+            index
         })
         .eq("id", id)
+        .eq("project_id", pid)
         .select()
-        .single();
+        .maybeSingle();
 
     if (error) {
         return res.status(500).json({ error: error.message });
@@ -95,7 +95,7 @@ boardsRouter.delete("/:id", async (req, res) => {
     const { id } = req.params;
 
     const { data, error } = await req.supabase
-        .from("projects")
+        .from("boards")
         .delete()
         .eq("id", id)
         .select()
