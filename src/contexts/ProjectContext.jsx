@@ -19,7 +19,16 @@ export function ProjectProvider({ children }) {
         loadProjects()
     }, [loading, session])
 
-    // =============== PROJECT FUNCTIONS ===============
+    // PROJECT FUNCTIONS
+    function swapProjectIndex(index1, index2){
+        setProjects(prev => {
+            const next = [...prev];
+            [next[index1], next[index2]] = [next[index2], next[index1]]
+            return next
+        })
+    }
+
+    // =============== PROJECT REQUEST FUNCTIONS ===============
     async function loadProjects(){
         if(!session){
             console.error("Failed to load projects: User is not authenticated");
@@ -99,11 +108,11 @@ export function ProjectProvider({ children }) {
             }
         });
 
-        const {data, error} = await response.json();
         if(!response.ok){
-            console.error("Failed to load board for Project: " + projectID + ":", error);
+            console.error("Failed to load board for Project: " + projectID + ":");
             return;
         }
+        const data = await response.json();
         console.log("Retrieved", data);
         return data
     }
@@ -139,6 +148,7 @@ export function ProjectProvider({ children }) {
                 loadProjects,
                 addProject,
                 selectProjectID,
+                swapProjectIndex,
 
                 loadBoards,
                 addBoard

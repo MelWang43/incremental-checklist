@@ -1,5 +1,7 @@
 .project-header{
-    justify-self: space-between;
+    position: fixed;
+    left: 0;
+    right: 0;
     background-color: var(--bg-darker);
 
     padding: 0.11rem 2rem;
@@ -11,19 +13,22 @@
 }
 
 .project-content{
-    padding: 1rem;
-    width: 100%;
+    margin-top: 4rem;
+    padding: 1rem 1rem;
+    overflow: auto;
+    width: fit-content;
+    box-sizing: border-box;
 }
 
 .board-container{
     display: flex;
     gap: 1rem;
-    width: fit-content;
+    /* width: fit-content; */
 }
 
 .btn-add-board{
-    width: 15vw;
-    height: 4rem;
+    width: 250px;
+    height: 3rem;
 
     border: 2px dashed var(--accent-lighter);
     background-color: var(--bg);
