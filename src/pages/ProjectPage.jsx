@@ -3,6 +3,8 @@ import { useProjects } from "../contexts/ProjectContext";
 import { useEffect, useState, useRef} from "react";
 import '../css/ProjectPage.css'
 import Board from '../components/Board'
+import FollowMouse from "../components/ui/FollowMouse";
+import { CardProvider } from "../contexts/CardContext";
 
 function ProjectPage() {
     const { id } = useParams();
@@ -16,6 +18,7 @@ function ProjectPage() {
     const [editingBoards, setEditingBoards] = useState(false)
 
     const [mousePos, setMousePos] = useState({x: 0, y: 0})
+    const [draggingBoard, setDraggingBoard] = useState(null) // The current board that is being moved
     const [editIndex, setEditIndex] = useState(0) // The index of the board we're currently moving 
     const [ghostBoardIndex, setGhostBoardIndex] = useState(0)
     const [boardStats, setBoardStats] = useState({index: 0, x: 0})
@@ -102,6 +105,7 @@ function ProjectPage() {
     const handleStartEditing = (board) => {
         setEditingBoards(true)
         
+        setDraggingBoard(board)
         setGhostBoardIndex(board.index)
         setEditIndex(board.index)
         
@@ -132,12 +136,17 @@ function ProjectPage() {
             updateAllBoardIndexes(next)
         }
 
+        setDraggingBoard(null)
         setEditingBoards(false)
         setEditIndex(-1)
     }
 
     function updateBoardIndexesInstant(){
         setBoards(prev => prev.map((board, index) => ({...board, index : index + 1})))
+    }
+
+    function updateBoardName(id, newName){
+        setBoards(prev => prev.map((board) => (id === board.id ? {...board, name : newName} : board)))
     }
     async function updateAllBoardIndexes(boards){
         for(let i = 0; i < boards.length; i++){
@@ -157,10 +166,16 @@ function ProjectPage() {
     const ghostBoard = (<div className="board ghost">GHOST</div>)
     return (
         <>
+        
+
         <div className="project-header">
             <h3>{project.name}</h3>
         </div>
 
+        {editingBoards && draggingBoard !== null ? <FollowMouse initialPos={mousePos}>
+            <Board
+                board={draggingBoard}/>
+        </FollowMouse> : <></>}
         <div className="project-content">
             <div className="board-container">
                 {boards && boards.map((board) => {
@@ -176,6 +191,7 @@ function ProjectPage() {
                                     board={board} 
                                     onDragStart={handleStartEditing} 
                                     onDragEnd={handleStopEditing}
+                                    onEditName={updateBoardName}
                                     />
                             </div>
                         }

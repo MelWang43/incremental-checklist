@@ -165,7 +165,6 @@ export function ProjectProvider({ children }) {
         }
 
         console.log('Updated Board:', data);
-
         return data
     }
 

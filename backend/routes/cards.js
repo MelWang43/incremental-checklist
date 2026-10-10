@@ -1,18 +1,17 @@
 import express from "express";
 
-const boardsRouter = express.Router({ mergeParams: true});
+const cardsRouter = express.Router();
 
 // Insert a new board into database
-// POST /api/projects/:pid/boards
-boardsRouter.post("/", async (req, res) => {
-    const projectID = req.params.pid;
-    const {name, index } = req.body;
+// POST /api/cards/
+cardsRouter.post("/", async (req, res) => {
+    const {board_id, text, index } = req.body;
 
     const { data, error } = await req.supabase
-        .from("boards")
+        .from("cards")
         .insert({
-            project_id: projectID,
-            name: name,
+            board_id: board_id,
+            text: text,
             index: index,
         })
         .select();
@@ -24,17 +23,14 @@ boardsRouter.post("/", async (req, res) => {
     res.status(201).json(data);
 });
 
-// READ ALL
-// GET /api/projects/:pid/boards
-boardsRouter.get("/", async (req, res) => {
-    const projectID = req.params.pid;
-
-    console.log("Project ID: ", projectID)
-
+// READ ALL FROM A BOARD
+// GET /api/cards/board/:bid
+cardsRouter.get("/board/:bid", async (req, res) => {
+    const {bid} = req.params
     const { data, error } = await req.supabase
-        .from("boards")
+        .from("cards")
         .select("*")
-        .eq("project_id", projectID)
+        .eq("board_id", bid)
         .order("index", { ascending: true });
 
     if (error) {
@@ -46,12 +42,12 @@ boardsRouter.get("/", async (req, res) => {
 
 
 // READ ONE
-// GET /api/projects/:id
-boardsRouter.get("/:id", async (req, res) => {
+// GET /api/cards
+cardsRouter.get("/:id", async (req, res) => {
     const { id } = req.params;
 
     const { data, error } = await req.supabase
-        .from("boards")
+        .from("cards")
         .select("*")
         .eq("id", id)
         .single();
@@ -65,13 +61,13 @@ boardsRouter.get("/:id", async (req, res) => {
 
 
 // UPDATE
-// PUT /api/projects/:pid/boards/:id
-boardsRouter.put("/:id", async (req, res) => {
-    const { pid, id } = req.params;
+// PUT /api/cards/:id
+cardsRouter.put("/:id", async (req, res) => {
+    const { id } = req.params;
     const { name, index } = req.body;
 
     const { data, error } = await req.supabase
-        .from("boards")
+        .from("cards")
         .update({
             name,
             index
@@ -89,12 +85,12 @@ boardsRouter.put("/:id", async (req, res) => {
 
 
 // DELETE
-// DELETE /api/projects/:id
-boardsRouter.delete("/:id", async (req, res) => {
+// DELETE /api/cards/:id
+cardsRouter.delete("/:id", async (req, res) => {
     const { id } = req.params;
 
     const { data, error } = await req.supabase
-        .from("boards")
+        .from("cards")
         .delete()
         .eq("id", id)
         .select()
@@ -108,4 +104,4 @@ boardsRouter.delete("/:id", async (req, res) => {
 });
 
 
-export default boardsRouter;
+export default cardsRouter;

@@ -3,6 +3,7 @@
     left: 0;
     right: 0;
     background-color: var(--bg-darker);
+    /* background-color: var(--bg-darker); */
 
     padding: 0.11rem 2rem;
     display: flex;

@@ -11,6 +11,10 @@
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
+  --completed-bright: rgb(106, 172, 100);
+  --completed: rgb(91, 212, 80);
+  --completed-dark: rgb(39, 85, 35);
+  --completed-dark2:rgb(18, 41, 16);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -39,7 +43,7 @@
     --text-h: #f3f4f6;
     --bg: #16171d;
     --bg-darker: #1f2028;
-    --bg-darker2:rgb(18, 19, 24)8;
+    --bg-darker2:rgb(18, 19, 24);
     --border: #2e303a;
     --code-bg: #1f2028;
     --accent: #905dc4;
@@ -118,4 +122,15 @@ input {
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid var(--border);
+}
+
+.auto-grow{
+  field-sizing: content;   
+    min-height: 1lh;       /* starting height */
+    
+    padding: 0.1rem;
+    resize: none;
+    overflow-wrap: anywhere;
+    font: inherit;
+    outline-color: transparent;
 }

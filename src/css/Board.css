@@ -4,6 +4,7 @@
     border-radius: 1rem;
     width: 250px;
     padding: 0.5rem 1rem;
+    font-size: 0.9rem;
 
     display: flex;
     flex-direction: column;
@@ -18,20 +19,68 @@
     border-color: transparent
 }
 
+.progress-bar{
+    background-color: var(--completed);
+    height: 0.5rem;
+    border-radius: 1rem;
+}
+
+.board.completed{
+    animation: boardCompletePulse 0.5s ease-out forwards;
+}
+@keyframes boardCompletePulse {
+    from {
+        border-color: white;
+        background-color: var(--completed-dark);
+    }
+    to {
+        border-color: var(--completed);
+        background-color: var(--completed-dark2);
+    }
+}
+
 
 .board-items-container{
     padding: 0.5rem 0rem;
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
 }
 
-.board-item{
-    display: flex;
+.board-editable-text{
+    background: transparent;
+    border: 1px solid transparent;
+
+    width: 90%;
+    font-weight: 550;
+    
+}
+
+.board-editable-text:focus{
+    outline-color: var(--accent);
+    background-color: var(--accent-bg);
+}
+
+.board-add-btn{
+    font-size: 0.9rem;
+    width: fit-content;
+}
+
+.board-add-input{
+    font-size: 0.9rem;
     background-color: var(--bg-darker);
     padding: 0.2rem 0.7rem;
     border-radius: 0.4rem;
-    border: 1px solid var(--border)
-
 }
 
-.board-item:hover{
-    border: 1px solid var(--accent);
+.board-add-input:focus{
+    outline-color: var(--accent);
+}
+
+.add-container{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: right;
 }

@@ -1,0 +1,45 @@
+.card{
+    display: flex;
+    background-color: var(--bg-darker);
+    padding: 0.2rem 0.3rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--border);
+    gap: 0.2rem;
+    transition: background-color 0.2s ease;
+}
+
+.card.completed {
+    background-color: var(--completed-dark);
+
+    animation: completePulse 0.5s ease-out forwards;
+}
+
+.card:hover{
+    border-color: var(--accent);
+}
+.card.completed:hover{
+    border-color: var(--completed);
+}
+
+
+@keyframes completePulse {
+    from {
+        background-color: var(--completed-bright);
+    }
+    to {
+        background-color: var(--completed-dark);
+    }
+}
+
+.card-editable-text{
+    background: transparent;
+    border: 1px solid transparent;
+
+    width: 90%;
+    
+}
+
+.card-editable-text:focus{
+    outline-color: var(--accent);
+    background-color: var(--accent-bg);
+}
