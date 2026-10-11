@@ -64,13 +64,14 @@ cardsRouter.get("/:id", async (req, res) => {
 // PUT /api/cards/:id
 cardsRouter.put("/:id", async (req, res) => {
     const { id } = req.params;
-    const { name, index } = req.body;
+    const { text, index, checked } = req.body;
 
     const { data, error } = await req.supabase
         .from("cards")
         .update({
-            name,
-            index
+            text,
+            index,
+            checked
         })
         .eq("id", id)
         .select()

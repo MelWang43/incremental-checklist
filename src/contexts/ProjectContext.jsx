@@ -168,6 +168,25 @@ export function ProjectProvider({ children }) {
         return data
     }
 
+    async function deleteBoard(projectID, boardID){
+        const response = await fetch(`http://localhost:3000/api/projects/${projectID}/boards/${boardID}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+        });
+
+        const {data, error} = await response.json();
+        if(!response.ok){
+            console.error("Failed to delete board: ", error);
+            return;
+        }
+
+        console.log('Deleted board:', data);
+        return data
+    }
+
     return (
         <ProjectContext.Provider value={
             { 
@@ -179,7 +198,8 @@ export function ProjectProvider({ children }) {
 
                 loadBoards,
                 addBoard,
-                updateBoard
+                updateBoard,
+                deleteBoard
              }}>
             {children}
         </ProjectContext.Provider>

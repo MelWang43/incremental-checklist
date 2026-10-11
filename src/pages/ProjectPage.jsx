@@ -4,20 +4,23 @@ import { useEffect, useState, useRef} from "react";
 import '../css/ProjectPage.css'
 import Board from '../components/Board'
 import FollowMouse from "../components/ui/FollowMouse";
-import { CardProvider } from "../contexts/CardContext";
+import { useCards } from "../contexts/CardContext";
 
 function ProjectPage() {
     const { id } = useParams();
-    const { selectProjectID, loadBoards, addBoard, updateBoard} = useProjects();
+    const { selectProjectID, loadBoards, addBoard, updateBoard, deleteBoard} = useProjects();
+    const { loadCards } = useCards();
 
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const boardRefs = useRef([]);
     const [boards, setBoards] = useState([])
+    const [newestBoardID, setNewestBoardID] = useState(-1) 
     const [editingBoards, setEditingBoards] = useState(false)
 
     const [mousePos, setMousePos] = useState({x: 0, y: 0})
+    const [dragOffset, setDragOffset] = useState({x: 0, y: 0})
     const [draggingBoard, setDraggingBoard] = useState(null) // The current board that is being moved
     const [editIndex, setEditIndex] = useState(0) // The index of the board we're currently moving 
     const [ghostBoardIndex, setGhostBoardIndex] = useState(0)
@@ -30,11 +33,20 @@ function ProjectPage() {
             const proj = await selectProjectID(id);
 
             setProject(proj);
-            setLoading(false);
+            
 
             const board = await loadBoards(id)
+            
+            // Pre-load all cards into each board
+            const result = await Promise.all(
+                board.map(async (b) => ({
+                    ...b,
+                    cards: await loadCards(b.id)
+                }))
+            );
+            setBoards(result);
 
-            setBoards(board);
+            setLoading(false);
         };
         setLoading(true)
         loadProject();
@@ -48,6 +60,7 @@ function ProjectPage() {
             // Determine if mouse is in the area of a board, prompting a move
             if(editingBoards){
                 let newGhostIndex = 0;
+                
                 for(var i = 1; i < boardStats.length; i++){
                     
                     if(i >= editIndex){
@@ -68,7 +81,7 @@ function ProjectPage() {
                         newGhostIndex = i
                     }
                 }
-                console.log("Ghost: " + newGhostIndex, "Editing: " + editIndex, "IsEditing?", editingBoards)
+                // console.log("Ghost: " + newGhostIndex, "Editing: " + editIndex, "IsEditing?", editingBoards)
                 setGhostBoardIndex(newGhostIndex);
                 
             }
@@ -98,6 +111,7 @@ function ProjectPage() {
     async function createNewBoard(e){
         const newBoard = {name: 'New Board', index: !boards ? 0 : boards.length + 1}
 
+        setNewestBoardID(boards.length + 1)
         await addBoard(id, newBoard)
         const board = await loadBoards(id)
         setBoards(board);
@@ -112,9 +126,13 @@ function ProjectPage() {
         // Compile all x coords, paied with their index value
         const stats = boardRefs.current.map((el, index) => {
             const rect = el?.getBoundingClientRect()
+            if(rect == null) console.log("NULL")
             const newX = (rect.width / 2) + rect.x
-            return {index: index, x: newX}
+            return {index: index, x: newX, cornerX: rect.x}
         })
+        
+        console.log(mousePos.x - stats[board.index].cornerX)
+        setDragOffset({x: -(mousePos.x - stats[board.index].cornerX), y: -20})
         setBoardStats(stats)
     }
 
@@ -131,9 +149,9 @@ function ProjectPage() {
             const [item] = next.splice(i1, 1)
             next.splice(i2, 0, item)
 
+            updateAllBoardIndexes(next, boards)
             setBoards(next)                      
             updateBoardIndexesInstant();
-            updateAllBoardIndexes(next)
         }
 
         setDraggingBoard(null)
@@ -145,13 +163,42 @@ function ProjectPage() {
         setBoards(prev => prev.map((board, index) => ({...board, index : index + 1})))
     }
 
-    function updateBoardName(id, newName){
+    function updateBoardName(id, newName, doUpdate = false){
+        console.log(newestBoardID)
+        setNewestBoardID(-1)
+
+        if(!doUpdate) return;
         setBoards(prev => prev.map((board) => (id === board.id ? {...board, name : newName} : board)))
     }
-    async function updateAllBoardIndexes(boards){
+    async function updateAllBoardIndexes(boards, oldBoards){
         for(let i = 0; i < boards.length; i++){
+            // if(boards[i].index === oldBoards[i].index) continue;
             await updateBoard(project.id, boards[i].id, boards[i].name, i + 1)
         }
+    }
+
+    async function handleDeleteBoard(board){
+        const next = boards
+        .filter(b => b.id !== board.id)
+        .map((b, index) => ({
+            ...b,
+            index: index + 1
+        }));
+
+        
+        await deleteBoard(board.project_id, board.id)
+        console.log("Next:", next, "vs", boards);
+        updateAllBoardIndexes(next, boards)
+        setBoards(next);
+    }
+
+    useEffect(() => {
+        boardRefs.current = []
+        console.log("Boards updated: ", boards)
+    }, [boards])
+
+    function updateBoardCards(id, cards){
+        setBoards(prev => prev.map((board) => (id === board.id ? {...board, cards : cards} : board)))
     }
 
     if (loading) {
@@ -163,7 +210,11 @@ function ProjectPage() {
     }
 
     
-    const ghostBoard = (<div className="board ghost">GHOST</div>)
+    // const ghostBoard = (<div className="board ghost"></div>)
+    const ghostBoard = (<Board
+                className={'ghost'}
+                board={draggingBoard}
+                initCards={draggingBoard?.cards}/>)
     return (
         <>
         
@@ -172,9 +223,11 @@ function ProjectPage() {
             <h3>{project.name}</h3>
         </div>
 
-        {editingBoards && draggingBoard !== null ? <FollowMouse initialPos={mousePos}>
+        {editingBoards && draggingBoard !== null ? <FollowMouse initialPos={mousePos} offset={dragOffset}>
             <Board
-                board={draggingBoard}/>
+                className={'dragging'}
+                board={draggingBoard}
+                initCards={draggingBoard.cards}/>
         </FollowMouse> : <></>}
         <div className="project-content">
             <div className="board-container">
@@ -190,8 +243,11 @@ function ProjectPage() {
                                     <Board  
                                     board={board} 
                                     onDragStart={handleStartEditing} 
-                                    onDragEnd={handleStopEditing}
+                                    onDelete={handleDeleteBoard}
                                     onEditName={updateBoardName}
+                                    isNew={newestBoardID === board.index}
+                                    initCards={board.cards}
+                                    onUpdateCards={updateBoardCards}
                                     />
                             </div>
                         }

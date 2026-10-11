@@ -6,9 +6,15 @@
     border: 1px solid var(--border);
     gap: 0.2rem;
     transition: background-color 0.2s ease;
+
+    
 }
 
 .card.completed {
+    background-color: var(--completed-dark);
+}
+
+.card.complete-effect {
     background-color: var(--completed-dark);
 
     animation: completePulse 0.5s ease-out forwards;
@@ -20,6 +26,9 @@
 .card.completed:hover{
     border-color: var(--completed);
 }
+.card.complete-effect:hover{
+    border-color: var(--completed);
+}
 
 
 @keyframes completePulse {
@@ -28,6 +37,26 @@
     }
     to {
         background-color: var(--completed-dark);
+    }
+}
+
+.card.deleted{
+    animation: cardDelete 0.3s ease-out forwards;
+    transform-origin: top;
+}
+
+@keyframes cardDelete {
+    0% {
+        
+    } 
+
+    70% {
+        background-color: var(--delete);
+    }
+    100% {
+        
+        transform: scaleY(0);
+        opacity: 0;
     }
 }
 
@@ -42,4 +71,21 @@
 .card-editable-text:focus{
     outline-color: var(--accent);
     background-color: var(--accent-bg);
+}
+
+.card-delete-btn{
+    opacity: 0;
+    transform: translateX(5px);
+
+    height: fit-content;
+    
+}
+
+.card-delete-btn:hover{
+    color: var(--delete);
+}
+
+.card:hover .card-delete-btn{
+    opacity: 1;
+    transform: translateX(0);;
 }

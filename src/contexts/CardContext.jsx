@@ -60,8 +60,52 @@ export function CardProvider({ children }) {
         return data
     }
 
+    async function updateCard(cardID, boardID, text, index, checked){
+        console.log("Updating:", cardID, text, index, checked)
+        const response = await fetch(`http://localhost:3000/api/cards/${cardID}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+                text: text,
+                index: index,
+                checked: checked
+            })
+        });
+
+        const {data, error} = await response.json();
+        if(!response.ok){
+            console.error("Failed to update card: ", error);
+            return;
+        }
+
+        console.log('Updated card:', data);
+        return data
+    }
+
+    async function deleteCard(cardID){
+        const response = await fetch(`http://localhost:3000/api/cards/${cardID}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+        });
+
+        const {data, error} = await response.json();
+        if(!response.ok){
+            console.error("Failed to delete card: ", error);
+            return;
+        }
+
+        console.log('Deleted card:', data);
+        return data
+    }
+
     return (
-        <CardContext.Provider value={{loadCards, addCard}}>
+        <CardContext.Provider value={{loadCards, addCard, updateCard, deleteCard}}>
             {children}
         </CardContext.Provider>
     )

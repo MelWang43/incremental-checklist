@@ -89,7 +89,7 @@ boardsRouter.put("/:id", async (req, res) => {
 
 
 // DELETE
-// DELETE /api/projects/:id
+// DELETE /api/boards/:id
 boardsRouter.delete("/:id", async (req, res) => {
     const { id } = req.params;
 

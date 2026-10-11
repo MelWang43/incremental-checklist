@@ -1,8 +1,9 @@
 import {useEffect, useState} from 'react'
 import '../../css/FollowMouse.css'
 
-function FollowMouse({children, initialPos}){
+function FollowMouse({children, initialPos, offset}){
     const [mousePos, setMousePos] = useState(initialPos)
+    const [offsetPos, setOffsetPos] = useState(offset)
     useEffect(() => {
             const handleMouseMove = (e) => {
                 const pos = {x: e.clientX, y: e.clientY}
@@ -20,7 +21,7 @@ function FollowMouse({children, initialPos}){
         }, [])
 
     return (
-        <div className="follow-mouse-container" style={{left: mousePos.x, top: mousePos.y}}>
+        <div className="follow-mouse-container" style={{left: mousePos.x + offsetPos.x, top: mousePos.y + offsetPos.y}}>
             {children}
         </div>
     )

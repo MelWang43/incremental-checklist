@@ -3,9 +3,11 @@ import '../css/Board.css'
 import { useProjects } from '../contexts/ProjectContext';
 import { useCards } from '../contexts/CardContext';
 import Card from './Card';
+import { GripHorizontal, Trash} from 'lucide-react';
 
-function Board({board, onDragStart, onDragEnd, onEditName}){
-
+function Board({board, onDragStart, onDelete, onEditName, onUpdateCards, initCards = [], isNew = false, className}){
+    const [deleted, setDeleted] = useState(false)
+    
     const [dragging, setDragging] = useState(false);
     const [name, setName] = useState(board.name)
     const { updateBoard } = useProjects();
@@ -14,21 +16,36 @@ function Board({board, onDragStart, onDragEnd, onEditName}){
     const [isAdding, setIsAdding] = useState(false)
     const [newCardText, setCardText] = useState("")
     const inputRef = useRef();
+    const nameRef = useRef();
 
-    const [cards, setCards] = useState([])
+    const [cards, setCards] = useState(initCards)
     const [progress, setProgress] = useState(0)
-    const { loadCards, addCard} = useCards();
+    const [doCompleteEffect, setDoCompleteEffect] = useState(false);
+
+    const { loadCards, addCard, updateCard, deleteCard} = useCards();
 
     useEffect(() => {
         const load = async () => {
+            console.log(initCards, cards)
             const data = await loadCards(board.id)
-            setCards(data)
+
+            
+            // setCards(data)
+            setProgress(calculateProgress(data))
+
+            if(data.length === 0) return false
+
+            return true;
         }
 
-        load()
+        if(initCards.length === 0) {
+            load()
+        } else {
+            setProgress(calculateProgress(cards))
+        }
+        if(isNew) nameRef.current?.focus()
     }, [])
     const handleMouseDown = (e) => {
-        return
         e.preventDefault()
         if(e.button != 0) return;
         setDragging(true);
@@ -43,9 +60,9 @@ function Board({board, onDragStart, onDragEnd, onEditName}){
 
     const handleBlurName = (e) => {
         console.log("Changing: " + board.name + " to " + name)
+        onEditName(board.id, name, !(name === board.name))
         if(name === board.name) return;
         updateBoard(board.project_id, board.id, name, board.index)
-        onEditName(board.id, name)
     }
 
     const handleStartAdd = (e) => {
@@ -71,6 +88,8 @@ function Board({board, onDragStart, onDragEnd, onEditName}){
         setCards(data)
         setProgress(calculateProgress(data))
         setCardText("")
+
+        onUpdateCards(board.id, data)
         
     }
 
@@ -87,22 +106,80 @@ function Board({board, onDragStart, onDragEnd, onEditName}){
         return sum * 100 / list.length
     }
 
-    const handleCheck = (id, val) => {
-        const next = cards.map((card) => (id === card.id) ? {...card, checked : val} : card)
+    const handleCheck = (e, val) => {
+        console.log("Setting checked to:", val)
+        const next = cards.map((card) => (e.id === card.id) ? {...card, checked : val} : card)
+        
+        setDoCompleteEffect(false);
+
+        requestAnimationFrame(() => {
+            setDoCompleteEffect(true)
+        })
+
+        updateCard(e.id, board.id, e.text, e.index, val)
         setProgress(calculateProgress(next))
         setCards(next);
+
+        onUpdateCards(board.id, next)
+    }
+
+    const handleCardChange = (e, newText) => {
+        if(e.text == newText) return
+
+        const next = cards.map((card) => (e.id === card.id) ? {...card, text : newText} : card)
+
+        updateCard(e.id, board.id, newText, e.index, e.checked)
+        onUpdateCards(board.id, next)
+        setCards(next)
+    }
+
+    const handleDeleteCard = async (e) => {
+        const next = cards.filter(card => card.id !== e.id)
+        await deleteCard(e.id)
+
+        // await new Promise(resolve => setTimeout(resolve, 340))
+        // setCards(next)
+
+        const data = await loadCards(board.id)
+        setCards(data)
+        onUpdateCards(board.id, data)
+        setProgress(calculateProgress(data))
+    }
+
+    const handleDelete = async (e) => {
+        if(deleted) return
+        setDeleted(true)
+        onDelete(board)
     }
     useEffect(() => {
         if(isAdding) inputRef.current?.focus()
     }, [isAdding])
 
-
     return (
-        <div className={`board ${dragging && 'dragging' } ${progress >= 100 && 'completed'}`} onMouseDown={handleMouseDown} >
-            <div className="progress-bar">{progress}</div>
-            <textarea className="auto-grow board-editable-text" value={name} onChange={handleNameChange} onBlur={handleBlurName}></textarea>
+        <div className={`board ${dragging ? 'dragging' : '' }
+         ${progress >= 100 && doCompleteEffect ? 'complete-effect' : ''} 
+         ${progress >= 100 && !doCompleteEffect ? 'completed' : ''}
+         ${className}
+         ${deleted ? 'deleted' : ''}`} >
+            {/* <p>{board.index}</p> */}
+            <button className="btn-no-effects btn-board-drag" onMouseDown={handleMouseDown}><GripHorizontal size={15}/></button>
+            <div className="progress-bar">
+                {cards.length > 0 && <div className={`progress-bar-fill`} style={{width: progress + "%"}}></div>}
+            </div>
+
+            <div className="board-title-container">
+                <textarea className="auto-grow board-editable-text" ref={nameRef} value={name} onChange={handleNameChange} onBlur={handleBlurName}></textarea>
+                <button className="btn-transparent board-delete-btn" onClick={handleDelete}><Trash/></button>
+            </div>
+            
+            
             <div className="board-items-container">
-                {cards.map((card) => <Card card={card} key={card.id} onCheck={handleCheck}/>)}
+                {cards.map((card) => 
+                    <Card card={card} 
+                    key={card.id} 
+                    onCheck={handleCheck} 
+                    onChange={handleCardChange}
+                    onDelete={handleDeleteCard}/>)}
             </div>
 
             { isAdding ? 

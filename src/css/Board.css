@@ -5,29 +5,76 @@
     width: 250px;
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
-
+    
     display: flex;
     flex-direction: column;
-}
 
-.board.dragging{
-    opacity: 0.4;
+    height: fit-content;
+    gap: 0.5rem;
+
+    max-height: 75vh;
 }
 
 .board.ghost{
+    opacity: 0.4;
+}
+.board.dragging{
+    rotate: -4deg;
+}
+
+.board.deleted{
+    background-color: var(--delete);
+}
+/* .board.ghost{
     background-color: var(--bg-darker);
-    border-color: transparent
+    border-color: transparent;
+     */
+
+.board-title-container{
+    display: flex;
+    
+}
+
+.board-delete-btn{
+    opacity: 0;
+    transform: translateX(5px);
+
+    height: fit-content;
+    
+}
+
+.board-delete-btn:hover{
+    color: var(--delete);
+}
+
+.board:hover .board-delete-btn{
+    opacity: 1;
+    transform: translateX(0);;
 }
 
 .progress-bar{
+    background-color: var(--bg-darker);
+    height: 0.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+}
+
+.progress-bar-fill{
     background-color: var(--completed);
     height: 0.5rem;
     border-radius: 1rem;
+    transition: width 0.1s ease;
+}
+
+.board.complete-effect{
+    animation: boardCompletePulse 0.5s ease-out forwards;
 }
 
 .board.completed{
-    animation: boardCompletePulse 0.5s ease-out forwards;
+    border-color: var(--completed);
+    background-color: var(--completed-dark2);
 }
+
 @keyframes boardCompletePulse {
     from {
         border-color: white;
@@ -41,11 +88,16 @@
 
 
 .board-items-container{
-    padding: 0.5rem 0rem;
+    
     display: flex;
     flex-direction: column;
 
     gap: 0.5rem;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--bg);
 }
 
 .board-editable-text{
@@ -54,7 +106,7 @@
 
     width: 90%;
     font-weight: 550;
-    
+    overflow: hidden;
 }
 
 .board-editable-text:focus{
@@ -83,4 +135,18 @@
     flex-direction: column;
     gap: 0.5rem;
     justify-content: right;
+}
+
+.btn-board-drag{
+    width: 100%;
+    align-self: center;
+    font-size: 0.8rem;
+
+    opacity: 0;
+    transform: translateY(-5px);
+}
+
+.board:hover .btn-board-drag{
+    opacity: 1;
+    transform: translateY(0px);
 }

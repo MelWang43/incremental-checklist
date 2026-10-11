@@ -14,7 +14,8 @@
   --completed-bright: rgb(106, 172, 100);
   --completed: rgb(91, 212, 80);
   --completed-dark: rgb(39, 85, 35);
-  --completed-dark2:rgb(18, 41, 16);
+  --completed-dark2:rgb(13, 29, 11);
+  --delete: rgb(207, 79, 79);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -125,12 +126,57 @@ input {
 }
 
 .auto-grow{
-  field-sizing: content;   
+    field-sizing: content;   
     min-height: 1lh;       /* starting height */
     
     padding: 0.1rem;
     resize: none;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
     font: inherit;
     outline-color: transparent;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.btn-transparent {
+  background-color: transparent;
+  font-size: inherit;
+  padding: 0;
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+
+  color: var(--text);
+}
+
+.btn-transparent:hover{
+  background-color: var(--social-bg);
+}
+
+
+.btn-no-effects{
+  background-color: transparent;
+  font-size: inherit;
+  padding: 0;
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+
+  color: inherit
+}
+.btn-no-effects:hover{
+  background-color: transparent;
+  color: inherit;
+}
+.btn-no-effects:active{
+  scale: 1;
+  background-color: none;
 }

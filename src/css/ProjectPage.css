@@ -15,10 +15,15 @@
 
 .project-content{
     margin-top: 4rem;
+    
     padding: 1rem 1rem;
-    overflow: auto;
+    overflow: hidden;
     width: fit-content;
     box-sizing: border-box;
+
+    flex: 1;
+    min-height: 0;
+    max-height: 100vh;
 }
 
 .board-container{

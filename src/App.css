@@ -4,5 +4,8 @@
 
     max-width: 100vw;
     box-sizing: border-box;
-    overflow: auto;
+    overflow-y: hidden;
+
+    display: flex;
+    flex-direction: column;
 }
