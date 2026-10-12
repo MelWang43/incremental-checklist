@@ -6,7 +6,7 @@
     border: 1px solid var(--border);
     gap: 0.2rem;
     transition: background-color 0.2s ease;
-
+    flex: 1;
     
 }
 
@@ -86,6 +86,22 @@
 }
 
 .card:hover .card-delete-btn{
+    opacity: 1;
+    transform: translateX(0);;
+}
+
+
+.card-container{
+    display: flex;
+}
+.card-drag-btn{
+    opacity: 0;
+    transform: translateX(5px);
+
+    height: fit-content;
+    
+}
+.card-container:hover .card-drag-btn{
     opacity: 1;
     transform: translateX(0);;
 }

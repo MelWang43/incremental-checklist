@@ -2,7 +2,7 @@
     background-color: var(--bg-darker2);
     border: 1px solid var(--text);
     border-radius: 1rem;
-    width: 250px;
+    width: 300px;
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     
@@ -13,17 +13,44 @@
     gap: 0.5rem;
 
     max-height: 75vh;
+    transition: all 0.2s ease;
 }
+
+.board:hover{
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0px 2px 9px var(--accent);
+
+}
+
+.board.blank{
+    border: none;
+    background-color: var(--border);
+    pointer-events: none;
+}
+
 
 .board.ghost{
     opacity: 0.4;
 }
 .board.dragging{
     rotate: -4deg;
+    border-color: var(--accent)
 }
 
 .board.deleted{
-    background-color: var(--delete);
+    transform-origin: left;
+    animation: boardDelete 0.1s ease-in forwards;
+}
+
+@keyframes boardDelete{
+    to{
+        background-color: var(--delete);
+
+        transform: scaleX(0);
+        opacity: 0;
+        
+    }
 }
 /* .board.ghost{
     background-color: var(--bg-darker);
@@ -73,6 +100,7 @@
 .board.completed{
     border-color: var(--completed);
     background-color: var(--completed-dark2);
+    box-shadow: 0px 2px 9px var(--completed);
 }
 
 @keyframes boardCompletePulse {
@@ -83,6 +111,7 @@
     to {
         border-color: var(--completed);
         background-color: var(--completed-dark2);
+        box-shadow: 0px 2px 9px var(--completed);
     }
 }
 

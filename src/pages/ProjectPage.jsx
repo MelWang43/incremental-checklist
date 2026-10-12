@@ -8,11 +8,15 @@ import { useCards } from "../contexts/CardContext";
 
 function ProjectPage() {
     const { id } = useParams();
-    const { selectProjectID, loadBoards, addBoard, updateBoard, deleteBoard} = useProjects();
+    const { selectProjectID, updateProject, loadBoards, addBoard, updateBoard, deleteBoard} = useProjects();
     const { loadCards } = useCards();
 
     const [project, setProject] = useState(null);
+    const [projectLoadError, setProjectLoadError] = useState(null)
     const [loading, setLoading] = useState(true);
+
+    const [projectName, setProjectName] = useState('')
+    const nameRef = useRef(null);
 
     const boardRefs = useRef([]);
     const [boards, setBoards] = useState([])
@@ -31,8 +35,14 @@ function ProjectPage() {
             setLoading(true);
 
             const proj = await selectProjectID(id);
-
+            console.log("Loaded project: ", proj)
+            if(!proj){
+                setProjectLoadError("Failed to Load")
+                setLoading(false)
+                return
+            };
             setProject(proj);
+            setProjectName(proj.name)
             
 
             const board = await loadBoards(id)
@@ -201,12 +211,41 @@ function ProjectPage() {
         setBoards(prev => prev.map((board) => (id === board.id ? {...board, cards : cards} : board)))
     }
 
-    if (loading) {
-        return <h1>Loading...</h1>;
+    function handleNameChange(e) {
+        const raw = e.target.value;
+        if(!raw) return;
+        setProjectName(raw);
     }
 
-    if (!project) {
-        return <h1>Failed to get Project</h1>;
+    const handleNameBlur = async (e) => {
+        const raw = e.target.value
+
+        nameRef.current?.blur()
+        if(raw === project.name) return;
+        const data = await updateProject(project.id, raw, project.description, project.accessed_at)
+        setProject(data)
+    }
+
+    if (loading) {
+        return(
+        <div>
+            <div className="project-header" style={{height: '3.1rem'}}>
+                Loading...
+            </div>
+            <div className="project-content">
+                <div className="board-container">
+                    <div className="board blank" style={{height: '9rem'}}></div>
+                    <div className="board blank" style={{height: '6rem'}}></div>
+                    <div className="board blank" style={{height: '3rem'}}></div>
+                    <div className="board blank" style={{height: '9rem'}}></div>
+                    <div className="board blank" style={{height: '6rem'}}></div>
+                </div>
+            </div>
+        </div>);
+    }
+
+    if (projectLoadError) {
+        return <h1>Failed to get Project :(</h1>;
     }
 
     
@@ -220,7 +259,11 @@ function ProjectPage() {
         
 
         <div className="project-header">
-            <h3>{project.name}</h3>
+            <input className="project-editable-text" value={projectName} 
+            onChange={handleNameChange} 
+            onBlur={handleNameBlur}
+            ref={nameRef}
+            onKeyDown={(e) => {if(e.key === 'Enter') {handleNameBlur(e)}}}></input>
         </div>
 
         {editingBoards && draggingBoard !== null ? <FollowMouse initialPos={mousePos} offset={dragOffset}>

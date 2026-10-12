@@ -2,6 +2,7 @@ import {useEffect, useState, useRef} from 'react'
 import '../css/Board.css'
 import { useProjects } from '../contexts/ProjectContext';
 import { useCards } from '../contexts/CardContext';
+import { useConfirm} from '../contexts/ConfirmContext'
 import Card from './Card';
 import { GripHorizontal, Trash} from 'lucide-react';
 
@@ -24,6 +25,7 @@ function Board({board, onDragStart, onDelete, onEditName, onUpdateCards, initCar
 
     const { loadCards, addCard, updateCard, deleteCard} = useCards();
 
+    const {confirm} = useConfirm();
     useEffect(() => {
         const load = async () => {
             console.log(initCards, cards)
@@ -148,7 +150,17 @@ function Board({board, onDragStart, onDelete, onEditName, onUpdateCards, initCar
 
     const handleDelete = async (e) => {
         if(deleted) return
+
+        const confirmed = await confirm({
+            title: "Delete Board",
+            message: "Are you sure you want to delete this board? This cannot be undone."
+        })
+
+        if(!confirmed) return;
+
         setDeleted(true)
+
+        await new Promise(resolve => setTimeout(resolve, 340))
         onDelete(board)
     }
     useEffect(() => {

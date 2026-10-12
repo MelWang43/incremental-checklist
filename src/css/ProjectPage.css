@@ -24,6 +24,7 @@
     flex: 1;
     min-height: 0;
     max-height: 100vh;
+
 }
 
 .board-container{
@@ -53,4 +54,29 @@
 .btn-add-board:active {
     background-color: var(--accent-lighter);
     scale: 1;
+}
+
+.project-editable-text{
+    background: transparent;
+    border: 1px solid transparent;
+
+    width: fit-content;
+    font-size: x-large;
+
+    field-sizing: content;   
+    
+
+    margin: 0.4rem;
+    padding: 0.4rem;
+    font-weight: 550;
+    
+}
+
+.project-editable-text:hover{
+    background-color: var(--social-bg);
+}
+
+.project-editable-text:focus{
+    outline-color: var(--accent);
+    background-color: var(--accent-bg);
 }

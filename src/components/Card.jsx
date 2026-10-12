@@ -1,7 +1,8 @@
-import { EllipsisVertical, SquareX, Trash } from 'lucide-react';
+import { EllipsisVertical, GripVertical, SquareX, Trash } from 'lucide-react';
 import '../css/Card.css'
 import Checkbox from './ui/Checkbox'
 import {useState} from 'react'
+import { useConfirm } from '../contexts/ConfirmContext';
 
 function Card( {card, onCheck, onChange, onDelete}){
 
@@ -9,6 +10,8 @@ function Card( {card, onCheck, onChange, onDelete}){
     const [doCheckEffect, setDoCheckEffect] = useState(false);
     const [text, setText] = useState(card.text)
     const [deleted, setDeleted] = useState(false) 
+
+    const {confirm} = useConfirm();
     const handleCheck = (val) => {
         setChecked(val);
         setDoCheckEffect(true)
@@ -24,8 +27,16 @@ function Card( {card, onCheck, onChange, onDelete}){
         onChange(card, e.target.value)
     }
 
-    function handleDelete(e) {
+    async function handleDelete(e) {
         if(deleted) return
+
+        const confirmed = await confirm({
+            title: 'Delete Card',
+            message: "Are you sure you want to delete this card? This cannot be undone.",
+            card: card
+        })
+
+        if(!confirmed) return;
         onDelete(card)
         setDeleted(true)
     }
@@ -33,7 +44,8 @@ function Card( {card, onCheck, onChange, onDelete}){
         <div className={`card ${checked && doCheckEffect ? 'complete-effect' : ''} ${checked && !doCheckEffect ? 'completed' : ''} ${deleted ? 'deleted' : ''}`}>
             <Checkbox value={card.checked} onCheck={handleCheck}/>
             <textarea className="auto-grow card-editable-text" value={text} onChange={handleTextChange} onBlur={handleTextBlur}></textarea>
-            <button className="btn-transparent card-delete-btn" onClick={handleDelete}><Trash/></button>
+            
+            <button className="btn-transparent card-delete-btn" onClick={handleDelete}><SquareX/></button>
         </div>
     )
 }

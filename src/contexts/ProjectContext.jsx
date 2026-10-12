@@ -51,6 +51,11 @@ export function ProjectProvider({ children }) {
     }
 
     async function selectProjectID(id){
+        if(!session){
+            console.error("Failed to load projects: User is not authenticated");
+            return;
+        }
+        
         const response = await fetch("http://localhost:3000/api/projects/" + id, {
             headers: {
                 Authorization: `Bearer ${session.access_token}`
@@ -90,6 +95,31 @@ export function ProjectProvider({ children }) {
 
         const data = await response.json();
         console.log('Created:',data);
+
+        return data
+    }
+
+    async function updateProject(projectID, name, description, accessed_at){
+        const response = await fetch("http://localhost:3000/api/projects/" + projectID, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+                name,
+                description,
+                accessed_at
+            })
+        });
+
+        if(!response.ok){
+            console.error("Failed to update project");
+            return;
+        }
+
+        const data = await response.json();
+        console.log('Updated:',data);
 
         return data
     }
@@ -195,6 +225,7 @@ export function ProjectProvider({ children }) {
                 addProject,
                 selectProjectID,
                 swapProjectIndex,
+                updateProject,
 
                 loadBoards,
                 addBoard,
