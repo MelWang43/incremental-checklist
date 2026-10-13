@@ -14,7 +14,15 @@ function ProjectDisplayPage(){
     }, [])
 
     if (!user){
-        return <p>Log in first</p>            
+        return (
+            <div className="home-no-account">
+                <h3>Log in first</h3>   
+
+                <button>Log in</button>
+                <p>or</p>
+                <button>Sign up</button>
+            </div>
+        )         
     }
     return(
         <div className="project-page">

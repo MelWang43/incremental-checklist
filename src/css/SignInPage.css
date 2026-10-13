@@ -1,0 +1,32 @@
+.signin-page{
+    display: flex;
+    flex-direction: column;
+
+    min-width: 25rem;
+    width: 20%;
+    margin-top: 5%;
+    align-self: center;
+    justify-content: center;
+
+    background-color: var(--bg-darker);
+    padding: 1rem;
+    border-radius: 2rem;
+
+    box-shadow: 0 4px 15px black;
+
+    gap: 0.5rem;
+
+    align-items: center;
+}
+
+.signin-page input {
+    width: 70%;
+}
+
+.btn-login{
+    margin-top: 2rem;
+}
+
+input.invalid {
+    outline-color: var(--delete);
+}

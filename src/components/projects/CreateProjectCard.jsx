@@ -10,6 +10,8 @@ function CreateProjectCard(){
 
     const {addProject, loadProjects} = useProjects();
 
+    const [loading, setLoading] = useState(false);
+
     const nav = useNavigate()
 
     const handleCreatePress = (e) => {
@@ -30,12 +32,17 @@ function CreateProjectCard(){
     const handleConfirm = async (e) => {
         e.preventDefault();
 
+        if(loading) return
+
+        
         setNameValid(true);
         if(!name){
             setNameValid(false)
             return;
         }
 
+        setLoading(true);
+        
         const data = await addProject(name, "Test");
         setAdding(false);
         loadProjects()
@@ -60,7 +67,7 @@ function CreateProjectCard(){
             </button>
             <div className="form-wrapper">
                 <div className={`new-project-form ${adding ? 'active' : ''}`}>
-                    <label for="project-name">Project Name: </label>
+                    <label htmlFor="project-name">Project Name: </label>
                     <input className={`${nameValid ? '' : 'invalid'}`} id="project-name" placeholder='Name' value={name} onChange={handleNameChanged}></input>
 
                     <div className="btn-row-container">

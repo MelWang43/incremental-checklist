@@ -22,6 +22,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<SignInPage />} />
+            <Route path="/signup" element={<SignInPage mode={'signup'}/>} />
             <Route path="/project/:id" element={<ProjectPage />} />
           </Routes>
         </main>

@@ -6,8 +6,9 @@ function Home(){
     
     return (
         <div className="grid-page">
-            <aside className="home-sidebar">Test</aside>
-            <main className="home-main"><ProjectDisplayPage/></main>
+            {/* <aside className="home-sidebar">Test</aside> */}
+            {/* <main className="home-main"><ProjectDisplayPage/></main> */}
+            <ProjectDisplayPage/>
         </div>
     )
 }

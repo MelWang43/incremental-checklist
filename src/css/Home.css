@@ -5,3 +5,7 @@
 .home-main{
     min-width: 0;
 }
+
+.grid-page{
+    display: flex;
+}
