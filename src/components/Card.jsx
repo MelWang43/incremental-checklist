@@ -1,10 +1,11 @@
-import { EllipsisVertical, GripVertical, SquareX, Trash } from 'lucide-react';
+import { EllipsisVertical, GripHorizontal, GripVertical, SquareX, Trash } from 'lucide-react';
 import '../css/Card.css'
 import Checkbox from './ui/Checkbox'
 import {useState} from 'react'
 import { useConfirm } from '../contexts/ConfirmContext';
+import { useSortable } from '@dnd-kit/react/sortable';
 
-function Card( {card, onCheck, onChange, onDelete}){
+function Card( {card, index, onCheck, onChange, onDelete}){
 
     const [checked, setChecked] = useState(card.checked);
     const [doCheckEffect, setDoCheckEffect] = useState(false);
@@ -12,6 +13,11 @@ function Card( {card, onCheck, onChange, onDelete}){
     const [deleted, setDeleted] = useState(false) 
 
     const {confirm} = useConfirm();
+
+    const {ref, isDragging} = useSortable({
+        id: card.id,
+        index: index,
+    })
     const handleCheck = (val) => {
         setChecked(val);
         setDoCheckEffect(true)
@@ -41,12 +47,19 @@ function Card( {card, onCheck, onChange, onDelete}){
         setDeleted(true)
     }
     return(
-        <div className={`card ${checked && doCheckEffect ? 'complete-effect' : ''} ${checked && !doCheckEffect ? 'completed' : ''} ${deleted ? 'deleted' : ''}`}>
-            <Checkbox value={card.checked} onCheck={handleCheck}/>
-            <textarea className="auto-grow card-editable-text" value={text} onChange={handleTextChange} onBlur={handleTextBlur}></textarea>
-            
-            <button className="btn-transparent card-delete-btn" onClick={handleDelete}><SquareX/></button>
-        </div>
+        <li ref={ref}
+            onDragStart={()=>{}}
+            className={`card ${checked && doCheckEffect ? 'complete-effect' : ''} ${checked && !doCheckEffect ? 'completed' : ''} ${deleted ? 'deleted' : ''}`}
+            >
+            <GripVertical size={18} className="card-grip"/>
+
+            <div className="card-content">
+                <Checkbox value={card.checked} onCheck={handleCheck}/>
+                <textarea className="auto-grow card-editable-text" value={text} onChange={handleTextChange} onBlur={handleTextBlur}></textarea>
+                
+                <button className="btn-transparent card-delete-btn" onClick={handleDelete}><SquareX/></button>
+            </div>
+        </li>
     )
 }
 

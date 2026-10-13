@@ -2,20 +2,71 @@
     place-self: stretch;
     border-radius: 1.5rem;
 
+    border: 2px solid var(--accent);
+    overflow: hidden;
+
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+
+    transition: all 0.2s ease;
+
+    height: 10rem;
+    width: 15rem;
+    padding: 0;
+
+    cursor: pointer;
+
+    position: relative;
 }
 
-.mini-project-btn{
+.mini-project-overlay{
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+
+    background: linear-gradient(180deg, black 0%, rgba(0, 0, 0, 0) 70%);
+    transition: all 0.2s ease;
+
+    pointer-events: none;
+}
+
+.mini-project:hover .mini-project-overlay{
+    opacity: 1;
+}
+
+.mini-project:hover{
+    border-color: var(--accent-bright);
+    box-shadow: 0 0 8px var(--accent);
+}
+
+.mini-project-img{
+    /* background: var(--accent); */
+
+    background: linear-gradient(90deg,rgba(2, 0, 36, 1) 0%, rgba(39, 9, 121, 1) 38%, rgba(90, 52, 117, 1) 100%);
+    height: 65%;
     width: 100%;
-    border: 1px solid transparent;
-    transition: all 0.1s ease-in-out;
-    border-radius: 0.5rem;
-    
 }
 
-.mini-project-btn:hover{
-    border: 1px solid var(--accent);
-    background-color: var(--accent-bg);
+.mini-project-desc{
+    background: var(--bg);
+    padding: 0.2rem 0.6rem;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    flex: 1;
+
+    
+
+    display: flex;
+    flex-direction: column;
+}
+.options-btn{
+    outline: none;
+    margin-left: auto;
+}
+
+.options-btn:hover{
+    background: var(--social-bg)
 }

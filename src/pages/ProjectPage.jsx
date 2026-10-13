@@ -5,15 +5,20 @@ import '../css/ProjectPage.css'
 import Board from '../components/Board'
 import FollowMouse from "../components/ui/FollowMouse";
 import { useCards } from "../contexts/CardContext";
+import { useAuth } from "../contexts/AuthContext";
+import { useConfirm } from "../contexts/ConfirmContext";
 
 function ProjectPage() {
     const { id } = useParams();
     const { selectProjectID, updateProject, loadBoards, addBoard, updateBoard, deleteBoard} = useProjects();
     const { loadCards } = useCards();
 
+    const {loading} = useAuth();
+    const { confirm } = useConfirm();
+
     const [project, setProject] = useState(null);
     const [projectLoadError, setProjectLoadError] = useState(null)
-    const [loading, setLoading] = useState(true);
+    const [loadingProject, setLoadingProject] = useState(true);
 
     const [projectName, setProjectName] = useState('')
     const nameRef = useRef(null);
@@ -32,17 +37,20 @@ function ProjectPage() {
 
     useEffect(() => {
         const loadProject = async () => {
-            setLoading(true);
-
+            setLoadingProject(true);
+            
+            if(loading) return;
             const proj = await selectProjectID(id);
             console.log("Loaded project: ", proj)
             if(!proj){
                 setProjectLoadError("Failed to Load")
-                setLoading(false)
+                setLoadingProject(false)
                 return
             };
             setProject(proj);
             setProjectName(proj.name)
+
+            updateProject(proj.id, proj.name, proj.description, new Date())
             
 
             const board = await loadBoards(id)
@@ -56,12 +64,12 @@ function ProjectPage() {
             );
             setBoards(result);
 
-            setLoading(false);
+            setLoadingProject(false);
         };
-        setLoading(true)
+        setLoadingProject(true)
         loadProject();
         
-    }, []);
+    }, [loading]);
 
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -226,7 +234,9 @@ function ProjectPage() {
         setProject(data)
     }
 
-    if (loading) {
+
+    
+    if (loadingProject) {
         return(
         <div>
             <div className="project-header" style={{height: '3.1rem'}}>

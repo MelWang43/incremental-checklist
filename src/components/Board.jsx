@@ -5,6 +5,8 @@ import { useCards } from '../contexts/CardContext';
 import { useConfirm} from '../contexts/ConfirmContext'
 import Card from './Card';
 import { GripHorizontal, Trash} from 'lucide-react';
+import { DragDropProvider } from '@dnd-kit/react';
+import { isSortable } from '@dnd-kit/react/sortable';
 
 function Board({board, onDragStart, onDelete, onEditName, onUpdateCards, initCards = [], isNew = false, className}){
     const [deleted, setDeleted] = useState(false)
@@ -26,6 +28,7 @@ function Board({board, onDragStart, onDelete, onEditName, onUpdateCards, initCar
     const { loadCards, addCard, updateCard, deleteCard} = useCards();
 
     const {confirm} = useConfirm();
+
     useEffect(() => {
         const load = async () => {
             console.log(initCards, cards)
@@ -167,6 +170,36 @@ function Board({board, onDragStart, onDelete, onEditName, onUpdateCards, initCar
         if(isAdding) inputRef.current?.focus()
     }, [isAdding])
 
+    const onCardsDragEnd = (e) => {
+        if(e.canceled) return;
+
+        const {source} = e.operation;
+        if(!isSortable(source)) return;
+        const {initialIndex, index} = source;
+        if(initialIndex === index){
+            console.log("Same index: ", initialIndex, index)
+            return;
+        }
+
+        setCards((current) => {
+            const next = [...current];
+
+            const [movedCard] = next.splice(initialIndex, 1)
+
+            next.splice(index, 0, movedCard)
+            
+            const reIndexed = next.map((card, index) => {
+                const newIndex = index + 1;
+                if(card.index !== newIndex) updateCard(card.id, board.id, card.text, newIndex, card.checked)
+                return {...card, index: newIndex}
+            })
+
+            // console.log("Old: ", current, "vs New: ", reIndexed, next)
+            return reIndexed;
+        })
+
+        
+    }
     return (
         <div className={`board ${dragging ? 'dragging' : '' }
          ${progress >= 100 && doCompleteEffect ? 'complete-effect' : ''} 
@@ -184,15 +217,18 @@ function Board({board, onDragStart, onDelete, onEditName, onUpdateCards, initCar
                 <button className="btn-transparent board-delete-btn" onClick={handleDelete}><Trash/></button>
             </div>
             
-            
-            <div className="board-items-container">
-                {cards.map((card) => 
-                    <Card card={card} 
-                    key={card.id} 
-                    onCheck={handleCheck} 
-                    onChange={handleCardChange}
-                    onDelete={handleDeleteCard}/>)}
-            </div>
+            <DragDropProvider onDragEnd={onCardsDragEnd}>
+                <ul className="board-items-container">
+                    {cards.map((card, index) => 
+                        
+                        <Card card={card} 
+                        key={card.id} 
+                        index={index}
+                        onCheck={handleCheck} 
+                        onChange={handleCardChange}
+                        onDelete={handleDeleteCard}/>)}
+                </ul>
+            </DragDropProvider>
 
             { isAdding ? 
             <div className="add-container">

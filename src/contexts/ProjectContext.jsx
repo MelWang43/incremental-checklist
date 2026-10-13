@@ -124,6 +124,25 @@ export function ProjectProvider({ children }) {
         return data
     }
 
+    async function deleteProject(projectID){
+        const response = await fetch(`http://localhost:3000/api/projects/${projectID}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+        });
+
+        const {data, error} = await response.json();
+        if(!response.ok){
+            console.error("Failed to delete project: ", error);
+            return;
+        }
+
+        console.log('Deleted project:', data);
+        return data
+    }
+
     // =============== BOARD FUNCTIONS ===============
 
     
@@ -226,6 +245,7 @@ export function ProjectProvider({ children }) {
                 selectProjectID,
                 swapProjectIndex,
                 updateProject,
+                deleteProject,
 
                 loadBoards,
                 addBoard,

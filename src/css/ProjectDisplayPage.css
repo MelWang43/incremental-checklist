@@ -9,13 +9,13 @@
     flex-direction: column;
     
     width: 90%;
-    max-width: 800px;
+    max-width: 1200px;
     padding: 1rem;
 }
 
 .project-grid{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 150px));
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 15rem));
     align-items: center;
     justify-items: center;
 

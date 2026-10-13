@@ -7,7 +7,8 @@
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #9431df;
-  --accent-lighter: #b964fa42;
+  --accent-bright: #dbabff;
+  --accent-lighter: #c06ffd42;
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
@@ -179,4 +180,30 @@ input {
 .btn-no-effects:active{
   scale: 1;
   background-color: none;
+}
+
+.options-content{
+  max-width: 25rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: .1rem;
+  box-shadow: 0 4px 12px black;
+
+  padding: 0.5rem;
+}
+
+.options-item {
+    padding: 9px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    font-size: 14px;
+
+    display: flex;
+    align-items: center;
+}
+
+.options-item:hover,
+.options-item:focus {
+    background: var(--social-bg);
 }
