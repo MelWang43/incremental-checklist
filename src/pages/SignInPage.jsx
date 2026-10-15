@@ -18,7 +18,7 @@ function SignInPage(){
 
     const [errorMessage, setErrorMessage] = useState('');
 
-    const [showVerifyCode, setShowVerifyCode] = useState(false);
+    const [showVerifyCode, setShowVerifyCode] = useState(loginMode === 'verify');
 
     const nav = useNavigate();
 
@@ -45,12 +45,13 @@ function SignInPage(){
 
         
         if(!validateInput()) return;
-        if(signUpMode){
-            handleSignUp(e);
-            return;
-        }
+        // if(signUpMode){
+        //     handleSignUp(e);
+        //     return;
+        // }
 
-        sendCode(email);
+        await sendCode(email);
+        window.location.href = "/account/verify"
 
         return;
         const {data, error} = await supabase.auth.signInWithPassword({
@@ -118,6 +119,9 @@ function SignInPage(){
     return (
         <div className="signin-page">
             
+            {!showVerifyCode ? 
+            
+            <>
             <button className="btn-transparent corner-arrow"><a href="/"><ArrowLeft/></a></button>
             <h1>{signUpMode ? 'Create an account' : 'Welcome back'}</h1>
             <label htmlFor="email">Email</label>
@@ -148,15 +152,26 @@ function SignInPage(){
 
             {errorMessage && <p style={{color: 'var(--delete)'}}>{errorMessage}</p>}
             
-            <div className="seperator"><span>Or continue with</span></div>
+            <div className="seperator"><span>Or continue with:</span></div>
 
-            <button className="btn-social" onClick={handleSignInWithGoogle}><img src="/google.svg" alt="Google" width={24}/> Sign in with Google</button>
+            <button className="btn-social" onClick={handleSignInWithGoogle}><img src="/google.svg" alt="Google" width={24}/> Google</button>
 
             <div className="seperator"></div>
             {signUpMode ? 
             <div>Existing user? <a href="login">Log in</a></div> 
             : 
             <div>Don't have an account? <a href="signup">Sign up</a></div>}
+
+            </> 
+            :
+            (<div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
+                <button className="btn-transparent corner-arrow"><a href="/account/login"><ArrowLeft/></a></button>
+                <h2>Verify your email</h2>
+                <p>We sent a verification link to your email, click it to verify your email</p>
+                
+                <button>Resend Email</button>
+            </div>)
+            }
         </div>
     )
 }

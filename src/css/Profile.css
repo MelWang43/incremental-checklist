@@ -1,0 +1,36 @@
+
+.profile-pic{
+    background-color: var(--accent);
+    width: 40px;
+    height: 40px;
+    border-radius: 5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+
+    color: white;
+
+    user-select: none;
+}
+
+
+.profile-pic:not(.inactive):hover {
+    filter: brightness(0.8);
+    border-color: var(--accent);
+    color: white;
+    background-color: var(--accent);
+}
+
+.profile-pic:not(.inactive):active {
+    filter: brightness(0.6);
+    border-color: var(--accent);
+}
+
+.dropdown-profile{
+    display: flex;
+    gap: 0.5rem;
+
+    align-items: center;
+}

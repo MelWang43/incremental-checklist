@@ -16,11 +16,21 @@ function ProjectDisplayPage(){
     if (!user){
         return (
             <div className="home-no-account">
-                <h3>Log in first</h3>   
+                <h2>Log in first</h2>   
+                <p>You need an account to use this app</p>   
+                
 
-                <button>Log in</button>
-                <p>or</p>
-                <button>Sign up</button>
+                <div className="seperator" style={{width: '26%'}}></div>
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', margin: '1rem'}}>
+                    <a href="/account/login">
+                        <button>Log in</button>
+                    </a>
+                    <p>or</p>
+
+                    <a href="/account/signup">
+                        <button>Sign up</button>
+                    </a>
+                </div>
             </div>
         )         
     }
@@ -33,7 +43,7 @@ function ProjectDisplayPage(){
                 <CreateProjectCard/>
                 <h3>Recent</h3>
                 <div className="project-grid">
-                    {projects.map((project) => <ProjectCard project={project} key={project.id}/>)}
+                    {projects.length > 0 ? projects.map((project) => <ProjectCard project={project} key={project.id}/>) : <h3>No Projects yet</h3>}
                 </div>
             </div>
         </div>

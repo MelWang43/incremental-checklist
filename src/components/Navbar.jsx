@@ -5,6 +5,7 @@ import { supabase } from '../supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { useConfirm } from '../contexts/ConfirmContext'
+import Profile from './Profile'
 
 function Navbar() {
     const {user} = useAuth()
@@ -46,19 +47,18 @@ function Navbar() {
 
 
 
-                {/* Temporary log in visuals made by chatGPT */}
                 {user ? (
                     <>
-                        <span className="nav-link">
-                            {user.email}
-                        </span>
 
-                        <button
+                        <Profile onLogOut={handleLogout}/>
+                        {/* <button
                             onClick={handleLogout}
                             className="nav-link"
                         >
                             Log out
-                        </button>
+                        </button> */}
+
+
                     </>
                 ) : (
                     <>

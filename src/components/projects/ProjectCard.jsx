@@ -5,6 +5,7 @@ import { useProjects } from '../../contexts/ProjectContext';
 import { EllipsisVertical, Trash } from 'lucide-react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
+
 import { useState } from 'react'
 
 function ProjectCard({project}){
