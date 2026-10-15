@@ -7,12 +7,13 @@ const ConfirmContext = createContext()
 export function ConfirmProvider({ children }) {
     const [modal, setModal] = useState(null)
 
-    const confirm = ({title, message, card}) => {
+    const confirm = ({title, message, card, confirmButtonText}) => {
         return new Promise((resolve) => {
             setModal({
                 title,
                 message,
                 card,
+                confirmButtonText,
                 resolve
             })
         })
@@ -31,6 +32,7 @@ export function ConfirmProvider({ children }) {
                 title={modal.title}
                 message={modal.message}
                 cardElement={modal.card}
+                confirmButtonText={modal.confirmButtonText}
                 onConfirm={() => handleResponse(true)}
                 onCancel={() => handleResponse(false)}/>
             )}

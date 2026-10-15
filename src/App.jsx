@@ -13,16 +13,17 @@ import SignInPage from './pages/SignInPage'
 import ProjectPage from './pages/ProjectPage'
 
 function App() {
-
+  const currentPath = window.location.pathname;
+  console.log(currentPath);
   return (
     <>
       <div className='app'>
-      <Navbar />
+      { !currentPath.startsWith('/account') && <Navbar />}
+
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<SignInPage />} />
-            <Route path="/signup" element={<SignInPage mode={'signup'}/>} />
+            <Route path="/account/:loginMode" element={<SignInPage />} />
             <Route path="/project/:id" element={<ProjectPage />} />
           </Routes>
         </main>

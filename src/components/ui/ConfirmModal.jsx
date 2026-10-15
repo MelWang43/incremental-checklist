@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import '../../css/ConfirmModal.css'
 import Card from '../Card.jsx'
 
-function ConfirmModal({title, message, onConfirm, onCancel, cardElement}){
+function ConfirmModal({title, message, onConfirm, onCancel, cardElement, confirmButtonText = "Delete"}){
 
     useEffect(() => {
         const handleKey = (e) => {
@@ -39,7 +39,7 @@ function ConfirmModal({title, message, onConfirm, onCancel, cardElement}){
 
                 <div style={{display: 'flex', gap: '1rem'}}>
                     <button className="btn-cancel" onClick={onCancel}>Cancel</button>
-                    <button className="btn-delete" onClick={onConfirm}>Delete</button>
+                    <button className="btn-delete" onClick={onConfirm}>{confirmButtonText}</button>
                 </div>
             </div>
         </div>

@@ -103,6 +103,13 @@ button {
   transition: all 0.2s ease;
   font-family: var(--sans);
   font-size: 1rem;
+
+  
+}
+
+button a {
+  text-decoration: none;
+  color: inherit;
 }
 
 button:hover{

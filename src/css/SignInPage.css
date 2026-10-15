@@ -19,6 +19,10 @@
     align-items: center;
 }
 
+.corner-arrow{
+    margin-right: auto;
+}
+
 .signin-page input {
     width: 70%;
 }
@@ -29,4 +33,34 @@
 
 input.invalid {
     outline-color: var(--delete);
+}
+
+.btn-social{
+    background: var(--social-bg);
+    border: 2px solid var(--border);
+
+    display: flex;
+    gap: 0.5rem;
+
+}
+
+.seperator{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 15px;
+    margin: 0.5rem 0;
+}
+
+.seperator::before,
+.seperator::after{
+    content: "";
+    flex: 1;
+    height: 2px;
+    background-color: var(--social-bg);
+}
+
+.seperator:not(:has(span)){
+    gap: 0;
 }
