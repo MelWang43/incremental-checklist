@@ -19,6 +19,11 @@
     position: relative;
 }
 
+.mini-project.loading{
+    background-color: var(--bg-darker);
+    border: none;
+}
+
 .mini-project-overlay{
     position: absolute;
     inset: 0;

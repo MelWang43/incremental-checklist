@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import { supabase } from "../supabaseClient.js";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useRevalidator } from 'react-router-dom';
 import '../css/SignInPage.css'
 import { ArrowLeft } from 'lucide-react';
 
@@ -19,9 +19,13 @@ function SignInPage(){
     const [errorMessage, setErrorMessage] = useState('');
 
     const [showVerifyCode, setShowVerifyCode] = useState(loginMode === 'verify');
+    const [resending, setResending] = useState(false);
+
+    const [sending, setSending] = useState(false)
 
     const nav = useNavigate();
 
+    
     function validateInput(){
         if(!email){
             setErrorMessage("Enter your email")
@@ -51,7 +55,8 @@ function SignInPage(){
         // }
 
         await sendCode(email);
-        window.location.href = "/account/verify"
+        // window.location.href = "/account/verify"
+        
 
         return;
         const {data, error} = await supabase.auth.signInWithPassword({
@@ -71,19 +76,35 @@ function SignInPage(){
     }
 
     async function sendCode(email){
+
+        if(sending) return;
+
+        setSending(true)
+
+        console.log("Sending verification code")
         const {error} = await supabase.auth.signInWithOtp({
             email,
             options: {
-                shouldCreateUser: true
-            }
+                shouldCreateUser: true,
+                emailRedirectTo: `${window.location.origin}`
+            },
+            type: 'email',
+            
         })
-
+        
         if(error){
             console.error(error.message)
+            setErrorMessage(error.message)
             return
         }
 
         console.log("Sent verification code")
+
+        nav('/account/verify', {
+            state: {email},
+        })
+        
+        setSending(false)
     }
 
     const handleSignUp = async (e) => {
@@ -114,7 +135,24 @@ function SignInPage(){
 
         if(error) {
             console.error(error.message);
+            setErrorMessage(error.message)
         }
+    }
+
+    const handleResend = async (e) => {
+        console.log(email)
+        if(resending) return;
+        setResending(true);
+        const {error} = await supabase.auth.resend({
+            type: 'signup',
+            email: email,
+        })
+
+        if(error) {
+            console.error(error.message)
+        }
+
+        setResending(false);
     }
     return (
         <div className="signin-page">
@@ -169,7 +207,7 @@ function SignInPage(){
                 <h2>Verify your email</h2>
                 <p>We sent a verification link to your email, click it to verify your email</p>
                 
-                <button>Resend Email</button>
+                <button onClick={handleResend}>Resend Email</button>
             </div>)
             }
         </div>

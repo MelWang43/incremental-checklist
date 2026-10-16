@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')).render(
       <ConfirmProvider>
         <ProjectProvider>
           <CardProvider>
-            <BrowserRouter>
+            <BrowserRouter forceRefresh={true}>
               <App />
             </BrowserRouter>
           </CardProvider>

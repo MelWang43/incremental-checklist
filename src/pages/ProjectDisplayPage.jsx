@@ -3,15 +3,27 @@ import ProjectCard from "../components/projects/ProjectCard"
 import '../css/ProjectDisplayPage.css'
 import { useAuth } from "../contexts/AuthContext"
 import { useProjects } from "../contexts/ProjectContext"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 function ProjectDisplayPage(){
     const {user, loading} = useAuth()
     const { projects, loadProjects} = useProjects();
+
+    const [loadingProject, setLoadingProject] = useState(true)
     
     useEffect(()=> {
-        loadProjects();
-    }, [])
+        const load = async () => {
+            await loadProjects();
+            setLoadingProject(false)
+        }
+        setLoadingProject(true)
+        
+
+        if(!user) return;
+
+        console.log("Load Projects")
+        load()
+    }, [user])
 
     if (!user){
         return (
@@ -34,6 +46,25 @@ function ProjectDisplayPage(){
             </div>
         )         
     }
+
+    if(loadingProject){
+        
+        return (<div className="project-page">
+            <div className="recent-projects" style={{alignItems: 'center'}}>
+                <h2>Loading...</h2>
+                <div className="project-grid">
+                    <div className="mini-project loading"></div>
+                    <div className="mini-project loading"></div>
+                    <div className="mini-project loading"></div>
+                    <div className="mini-project loading"></div>
+                    <div className="mini-project loading"></div>
+                    <div className="mini-project loading"></div>
+                    <div className="mini-project loading"></div>
+                </div>
+            </div>
+        </div>)
+    }
+
     return(
         <div className="project-page">
             
