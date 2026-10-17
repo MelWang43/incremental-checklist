@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import {supabase} from '../supabaseClient.js'
 import { useAuth } from './AuthContext.jsx';
 
+const API_URL = import.meta.env.VITE_API_URL
 const ProjectContext = createContext()
 
 export function ProjectProvider({ children }) {
@@ -35,7 +36,7 @@ export function ProjectProvider({ children }) {
             return;
         }
 
-        const response = await fetch("http://incremental-checklist-backend.vercel.app/api/projects", {
+        const response = await fetch(`${API_URL}/api/projects`, {
             headers: {
                 Authorization: `Bearer ${session.access_token}`
             }
@@ -56,7 +57,7 @@ export function ProjectProvider({ children }) {
             return;
         }
         
-        const response = await fetch("http://localhost:3000/api/projects/" + id, {
+        const response = await fetch(`${API_URL}/api/projects/${id}`, {
             headers: {
                 Authorization: `Bearer ${session.access_token}`
             }
@@ -76,7 +77,7 @@ export function ProjectProvider({ children }) {
             return;
         }
 
-        const response = await fetch("http://localhost:3000/api/projects", {
+        const response = await fetch(`${API_URL}/api/projects`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -100,7 +101,7 @@ export function ProjectProvider({ children }) {
     }
 
     async function updateProject(projectID, name, description, accessed_at){
-        const response = await fetch("http://localhost:3000/api/projects/" + projectID, {
+        const response = await fetch(`${API_URL}/api/projects/${projectID}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -125,7 +126,7 @@ export function ProjectProvider({ children }) {
     }
 
     async function deleteProject(projectID){
-        const response = await fetch(`http://localhost:3000/api/projects/${projectID}`, {
+        const response = await fetch(`${API_URL}/api/projects/${projectID}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -153,7 +154,7 @@ export function ProjectProvider({ children }) {
             return;
         }
 
-        const response = await fetch(`http://localhost:3000/api/projects/${projectID}/boards`, {
+        const response = await fetch(`${API_URL}/api/projects/${projectID}/boards`, {
             headers: {
                 Authorization: `Bearer ${session.access_token}`
             }
@@ -169,7 +170,7 @@ export function ProjectProvider({ children }) {
     }
 
     async function addBoard(projectID, board){
-        const response = await fetch(`http://localhost:3000/api/projects/${projectID}/boards`, {
+        const response = await fetch(`${API_URL}/api/projects/${projectID}/boards`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -195,7 +196,7 @@ export function ProjectProvider({ children }) {
     async function updateBoard(projectID, boardID, newName, newIndex){
 
         console.log("Updating:", boardID, newName, newIndex)
-        const response = await fetch(`http://localhost:3000/api/projects/${projectID}/boards/${boardID}`, {
+        const response = await fetch(`${API_URL}/api/projects/${projectID}/boards/${boardID}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -218,7 +219,7 @@ export function ProjectProvider({ children }) {
     }
 
     async function deleteBoard(projectID, boardID){
-        const response = await fetch(`http://localhost:3000/api/projects/${projectID}/boards/${boardID}`, {
+        const response = await fetch(`${API_URL}/api/projects/${projectID}/boards/${boardID}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

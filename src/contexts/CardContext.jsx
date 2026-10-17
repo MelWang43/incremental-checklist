@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useAuth } from './AuthContext'
 
+const API_URL = import.meta.env.VITE_API_URL
 const CardContext = createContext()
 
 export function CardProvider({ children }) {
@@ -13,7 +14,7 @@ export function CardProvider({ children }) {
             return;
         }
 
-        const response = await fetch("http://localhost:3000/api/cards/board/" + boardID, {
+        const response = await fetch(`${API_URL}/api/cards/board/${boardID}`, {
             headers: {
                 Authorization: `Bearer ${session.access_token}`
             }
@@ -36,7 +37,7 @@ export function CardProvider({ children }) {
     async function addCard(boardID, text, index){
         console.log("Trying to add: " + boardID, text, index)
 
-        const response = await fetch(`http://localhost:3000/api/cards`, {
+        const response = await fetch(`${API_URL}/api/cards`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -62,7 +63,7 @@ export function CardProvider({ children }) {
 
     async function updateCard(cardID, boardID, text, index, checked){
         console.log("Updating:", cardID, text, index, checked)
-        const response = await fetch(`http://localhost:3000/api/cards/${cardID}`, {
+        const response = await fetch(`${API_URL}/api/cards/${cardID}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -86,7 +87,7 @@ export function CardProvider({ children }) {
     }
 
     async function deleteCard(cardID){
-        const response = await fetch(`http://localhost:3000/api/cards/${cardID}`, {
+        const response = await fetch(`${API_URL}/api/cards/${cardID}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
