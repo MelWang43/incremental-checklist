@@ -9,14 +9,16 @@ import cors from "cors"
 
 const app = express()
 
-app.use(cors({
+const corsOptions = cors({
     origin: [
       "http://localhost:5173",
       "https://taskpoint-eight.vercel.app"
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
-}))
+})
+
+app.use(corsOptions)
 
 app.use(express.json())
 
