@@ -29,8 +29,8 @@ app.use('/api/projects', authenticate, projectsRouter)
 app.use('/api/projects/:pid/boards', authenticate, boardsRouter)
 app.use('/api/cards', authenticate, cardsRouter)
 
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000')
-})
+// app.listen(3000, () => {
+//   console.log('Server running on http://localhost:3000')
+// })
 
 export default app;
