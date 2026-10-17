@@ -35,7 +35,7 @@ export function ProjectProvider({ children }) {
             return;
         }
 
-        const response = await fetch("http://localhost:3000/api/projects", {
+        const response = await fetch("http://incremental-checklist-backend.vercel.app/api/projects", {
             headers: {
                 Authorization: `Bearer ${session.access_token}`
             }

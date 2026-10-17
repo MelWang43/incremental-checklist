@@ -10,7 +10,7 @@ import cors from "cors"
 const app = express()
 
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: "https://taskpoint-eight.vercel.app"
 }))
 
 app.use(express.json())
@@ -27,3 +27,5 @@ app.use('/api/cards', authenticate, cardsRouter)
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000')
 })
+
+export default app;
