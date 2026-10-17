@@ -9,7 +9,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 function Profile({onLogOut}){
     const {user } = useAuth()
 
-    const name = user.user_metadata.name;
+    const name = !user.user_metadata.name ? user.email : user.user_metadata.name;
     return (
         <div className="profile">
 

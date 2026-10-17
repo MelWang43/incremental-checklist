@@ -58,7 +58,7 @@ function ProjectCard({project}){
                 <div className="mini-project-desc">{project.name}
 
                     <div style={{display: 'flex', padding: '0.1rem 0.4rem', width: '95%'}}>
-                        <span style={{fontSize: '0.9rem', fontWeight: 'normal'}}>Last Accessed: {formatDate(project.accessed_at)}</span>
+                        <span style={{fontSize: '0.76rem', fontWeight: 'normal', opacity: 0.7}}>Last Accessed: {formatDate(project.accessed_at)}</span>
                         <DropdownMenu.Root>
                             <DropdownMenu.Trigger className="btn-transparent options-btn">
                                 <EllipsisVertical size={18}/>

@@ -8,7 +8,7 @@ import { GripHorizontal, Trash} from 'lucide-react';
 import { DragDropProvider } from '@dnd-kit/react';
 import { isSortable } from '@dnd-kit/react/sortable';
 
-function Board({board, onDragStart, onDelete, onEditName, onUpdateCards, initCards = [], isNew = false, className}){
+function Board({board, onDragStart, onDelete, onEditName, onUpdateCards, onProgressChange, initCards = [], isNew = false, className}){
     const [deleted, setDeleted] = useState(false)
     
     const [dragging, setDragging] = useState(false);

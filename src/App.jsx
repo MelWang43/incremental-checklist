@@ -11,6 +11,7 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import SignInPage from './pages/SignInPage'
 import ProjectPage from './pages/ProjectPage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
 
 function App() {
   const currentPath = window.location.pathname;
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/account/:loginMode" element={<SignInPage />} />
             <Route path="/project/:id" element={<ProjectPage />} />
+            <Route path="/account/verify" element={<VerifyEmailPage/>}/>
           </Routes>
         </main>
       </div>

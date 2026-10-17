@@ -37,7 +37,7 @@ function Navbar() {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <Link to="/"><img src="/google.svg" alt="logo" width={40}/></Link>
+                <Link to="/"><img src="/logo.svg" alt="logo" width={40}/></Link>
             </div>
 
             <div className="navbar-links">

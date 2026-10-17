@@ -64,3 +64,7 @@ input.invalid {
 .seperator:not(:has(span)){
     gap: 0;
 }
+
+.login-input{
+    margin-bottom: 0.5rem;
+}

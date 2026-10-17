@@ -264,6 +264,7 @@ function ProjectPage() {
                 className={'ghost'}
                 board={draggingBoard}
                 initCards={draggingBoard?.cards}/>)
+    const progress = 50
     return (
         <>
         
@@ -274,6 +275,7 @@ function ProjectPage() {
             onBlur={handleNameBlur}
             ref={nameRef}
             onKeyDown={(e) => {if(e.key === 'Enter') {handleNameBlur(e)}}}></input>
+
         </div>
 
         {editingBoards && draggingBoard !== null ? <FollowMouse initialPos={mousePos} offset={dragOffset}>
